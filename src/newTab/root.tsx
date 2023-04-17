@@ -1,5 +1,5 @@
-import { ConfigProvider } from "antd";
-import App from "./App";
+import { ConfigProvider } from 'antd';
+import App from './App';
 
 function Root() {
   return (

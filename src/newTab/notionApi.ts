@@ -1,7 +1,7 @@
-import { useState, useCallback, useEffect } from "react";
-import { isDev, sendChromeMessage } from "./utils";
-import { useDebounceFn } from "ahooks";
-import { mockData } from "./mockdata";
+import { useState, useCallback, useEffect } from 'react';
+import { isDev, sendChromeMessage } from './utils';
+import { useDebounceFn } from 'ahooks';
+import { mockData } from './mockdata';
 
 interface ItemProps {
   id: string;
@@ -38,10 +38,10 @@ interface DateItemProps {
 }
 
 const InitDateItem = {
-  id: "",
-  title: "",
-  content: "",
-  date: "",
+  id: '',
+  title: '',
+  content: '',
+  date: '',
 };
 
 export const useNotionData = () => {
@@ -54,9 +54,9 @@ export const useNotionData = () => {
       const formatResult = mockData.results.map((item: ItemProps) => {
         return {
           id: item.id,
-          title: item.properties.Name.title[0]?.text.content ?? "",
-          content: item?.properties.Todo.rich_text[0]?.text.content ?? "",
-          date: item?.properties.Date.date?.start ?? "",
+          title: item.properties.Name.title[0]?.text.content ?? '',
+          content: item?.properties.Todo.rich_text[0]?.text.content ?? '',
+          date: item?.properties.Date.date?.start ?? '',
         };
       });
       setLoading(false);
@@ -65,8 +65,8 @@ export const useNotionData = () => {
     } else {
       setLoading(true);
       sendChromeMessage({
-        action: "notion",
-        operate: "query",
+        action: 'notion',
+        operate: 'query',
       })
         .then((data: any) => {
           const formatResult = data.results.map((item: ItemProps) => {
@@ -89,10 +89,10 @@ export const useNotionData = () => {
 
   const notionCreate = useCallback(async () => {
     sendChromeMessage({
-      action: "notion",
-      operate: "create",
+      action: 'notion',
+      operate: 'create',
       payload: {
-        content: "",
+        content: '',
       },
     }).then(() => notionGet());
   }, []);
@@ -100,8 +100,8 @@ export const useNotionData = () => {
   const { run } = useDebounceFn(
     async (pageId: string, title: string, content: string) => {
       sendChromeMessage({
-        action: "notion",
-        operate: "update",
+        action: 'notion',
+        operate: 'update',
         payload: {
           pageId,
           content,

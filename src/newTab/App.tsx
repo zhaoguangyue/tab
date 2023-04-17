@@ -1,25 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import dayjs from "dayjs";
+import ReactMarkdown from "react-markdown";
+import { MilkdownProvider } from "@milkdown/react";
+import "@milkdown/theme-nord/style.css";
 import {
   Button,
   Divider,
-  Card,
   Space,
   Collapse,
-  Input,
   Calendar,
   Typography,
   Segmented,
 } from "antd";
 import { BarsOutlined, CalendarOutlined } from "@ant-design/icons";
-import { sendChromeMessage } from "./utils";
+import { useFavicon } from "ahooks";
+
+import favicon from "../assets/favicon.svg";
 import { MilkdownEditor } from "./component/Editor";
 import { Search } from "./component/Search";
-import dayjs from "dayjs";
-
-import ReactMarkdown from "react-markdown";
-
-import { MilkdownProvider } from "@milkdown/react";
-import "@milkdown/theme-nord/style.css";
 import { useNotionData } from "./notionApi";
 
 const { Panel } = Collapse;
@@ -59,6 +57,8 @@ function App() {
       setActiveKey([curData.id]);
     }
   }, [loading]);
+
+  useFavicon(favicon);
 
   return (
     <div className="App">
