@@ -1,0 +1,66 @@
+{
+  "name": "tab",
+  "version": "1.0",
+  "description": "一个tab",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "chrome_url_overrides": {
+    "newtab": "./tab.html"
+  },
+  "permissions": [
+    "background",
+    "contextMenus",
+    "geolocation",
+    "management",
+    "topSites",
+    "bookmarks",
+    "unlimitedStorage",
+    "topSites",
+    "identity",
+    "http://*/",
+    "https://*/",
+    "chrome://favicon/",
+    "history",
+    "alarms",
+    "notifications",
+    "tabs",
+    "storage",
+    "activeTab",
+    "declarativeContent",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking",
+    "cookies",
+    "scripting"
+  ],
+  "host_permissions": ["*://*/*"],
+  "web_accessible_resources": [
+    {
+      "resources": ["/vite.svg"],
+      "matches": ["<all_urls>"]
+    },
+    {
+      "resources": ["insert.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "/vite.svg",
+      "32": "/vite.svg",
+      "48": "/vite.svg",
+      "128": "/vite.svg"
+    },
+    "default_title": "React CRX MV3"
+  },
+  "icons": {
+    "16": "/vite.svg",
+    "32": "/vite.svg",
+    "48": "/vite.svg",
+    "128": "/vite.svg"
+  }
+}

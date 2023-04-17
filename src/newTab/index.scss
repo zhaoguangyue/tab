@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  width: 100vw;
+  height: 100vh;
+  /* background: url('../assets/4k.jpg') no-repeat center center; */
+  background-size: cover;
+}
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.milkdown {
+  @apply bg-slate-50 border border-t-0;
+  box-sizing: border-box;
+  height: calc(100% - 82px);
+}
+
+.editor {
+  overflow: scroll;
+  padding: 0 30px;
+  @apply mx-auto;
+}
+
+.prose {
+  max-width: 100%;
+}
+.prose :where(ul > li):not(:where([class~="not-prose"] *)) {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+.prose
+  :where(.prose > ul > li > *:last-child):not(:where([class~="not-prose"] *)) {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+.prose :where(p):not(:where([class~="not-prose"] *)) {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+.prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~="not-prose"] *)) {
+  font-weight: 400;
+}
+
+.markdown-editor {
+  padding-right: 0;
+  & > div {
+    height: 100%;
+  }
+  .editor {
+    height: 100%;
+  }
+}
