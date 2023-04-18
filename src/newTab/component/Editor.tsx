@@ -17,7 +17,6 @@ interface EditorProps {
 }
 export const MilkdownEditor = (props: EditorProps) => {
   const { data, update } = props;
-  console.log('file: editor.tsx:20 ~ MilkdownEditor ~ data:', data);
   const editorRef = useRef<any>();
   const [title, setTitle] = useState(data.title);
   const [content, setContent] = useState('');
@@ -59,7 +58,6 @@ export const MilkdownEditor = (props: EditorProps) => {
   useKeyPress(
     ['meta.s', 'ctrl.s'],
     (e) => {
-      console.log(1231231);
       update(data.id, data.title, content);
       e.preventDefault();
     },

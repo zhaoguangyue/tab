@@ -1,41 +1,31 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import dayjs from "dayjs";
-import ReactMarkdown from "react-markdown";
-import { MilkdownProvider } from "@milkdown/react";
-import "@milkdown/theme-nord/style.css";
-import {
-  Button,
-  Divider,
-  Space,
-  Collapse,
-  Calendar,
-  Typography,
-  Segmented,
-} from "antd";
-import { BarsOutlined, CalendarOutlined } from "@ant-design/icons";
-import { useFavicon } from "ahooks";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import dayjs from 'dayjs';
+import ReactMarkdown from 'react-markdown';
+import { MilkdownProvider } from '@milkdown/react';
+import '@milkdown/theme-nord/style.css';
+import { Button, Divider, Space, Collapse, Calendar, Typography, Segmented } from 'antd';
+import { BarsOutlined, CalendarOutlined } from '@ant-design/icons';
+import { useFavicon } from 'ahooks';
 
-import favicon from "../assets/favicon.svg";
-import { MilkdownEditor } from "./component/Editor";
-import { Search } from "./component/Search";
-import { useNotionData } from "./notionApi";
+import favicon from '../assets/favicon.svg';
+import { MilkdownEditor } from './component/Editor';
+import { Search } from './component/Search';
+import { useNotionData } from './notionApi';
 
 const { Panel } = Collapse;
 
 function App() {
-  const { dataList, curData, loading, setCurData, notionCreate, notionUpdate } =
-    useNotionData();
+  const { dataList, curData, loading, setCurData, notionCreate, notionUpdate } = useNotionData();
   const [activeKey, setActiveKey] = useState<string[] | string>([]);
-  console.log("file: App.tsx:31 ~ App ~ activeKey:", activeKey);
 
-  const [chartStyle, setChartStyle] = useState<string>("list");
+  const [chartStyle, setChartStyle] = useState<string>('list');
 
   const handleChangeStyle = useCallback((value: any) => {
     setChartStyle(value);
   }, []);
 
   const dateCellRender = (current: any) => {
-    const today = dayjs(current).format("YYYY-MM-DD");
+    const today = dayjs(current).format('YYYY-MM-DD');
     const date = dataList.find((item) => {
       return today === item.date;
     });
@@ -52,7 +42,7 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("file: App.tsx:58 ~ useEffect ~ loading:", loading);
+    console.log('file: App.tsx:58 ~ useEffect ~ loading:', loading);
     if (!loading) {
       setActiveKey([curData.id]);
     }
@@ -76,21 +66,21 @@ function App() {
             value={chartStyle}
             options={[
               {
-                value: "list",
+                value: 'list',
                 icon: <BarsOutlined />,
               },
               {
-                value: "calendar",
+                value: 'calendar',
                 icon: <CalendarOutlined />,
               },
             ]}
           />
         </div>
         <div className="flex-1 overflow-hidden">
-          {chartStyle === "calendar" && (
+          {chartStyle === 'calendar' && (
             <Calendar cellRender={dateCellRender} headerRender={() => null} />
           )}
-          {chartStyle === "list" && (
+          {chartStyle === 'list' && (
             <div className="flex h-full w-full">
               <div className="overflow-auto w-[300px]">
                 <Collapse activeKey={activeKey} onChange={setActiveKey}>
@@ -100,17 +90,9 @@ function App() {
                         className="prose break-words cursor-pointer"
                         onClick={() => setCurData(item)}
                       >
-                        <ReactMarkdown>{item.content}</ReactMarkdown>
+                        <ReactMarkdown>{item.content || '暂无'}</ReactMarkdown>
                       </div>
                     </Panel>
-                    // <Card
-                    //   title={item.title}
-                    //   key={item.id}
-                    //   onClick={}
-                    // >
-                    //   <ReactMarkdown>{item.content}</ReactMarkdown>
-                    //   {/* <p>{item?.properties.Todo.rich_text[0]?.text.content}</p> */}
-                    // </Card>
                   ))}
                 </Collapse>
                 <Space direction="vertical"></Space>
