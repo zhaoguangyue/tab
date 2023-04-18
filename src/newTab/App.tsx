@@ -42,7 +42,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log('file: App.tsx:58 ~ useEffect ~ loading:', loading);
     if (!loading) {
       setActiveKey([curData.id]);
     }

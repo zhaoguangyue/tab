@@ -12,10 +12,10 @@ export const Search = () => {
   const [suggest, setSuggest] = useState<string[]>([]);
   const { engine, icon } = useMemo(() => SearchEngine[index], [index]);
 
-  const changeSearchEngine = () => {
+  const changeSearchEngine = useCallback(() => {
     const nextIndex = index >= SearchEngine.length - 1 ? 0 : index + 1;
     setIndex(nextIndex);
-  };
+  }, [index]);
 
   const onChangeSearch = useCallback((e: any) => {
     setSearch(e.target.value);
@@ -54,34 +54,37 @@ export const Search = () => {
     handleSearch();
   }, [search, engine]);
 
-  const onSearch = useCallback((val: string) => {
+  const onSearch = useCallback(() => {
     switch (engine) {
       case Engine.Google:
-        window.location.href = `https://www.google.com/search?q=${val}&sourceid=chrome&ie=UTF-8`;
+        window.location.href = `https://www.google.com/search?q=${search}&sourceid=chrome&ie=UTF-8`;
         break;
       case Engine.Baidu:
-        window.location.href = `https://www.baidu.com/s?wd=${val}`;
+        window.location.href = `https://www.baidu.com/s?wd=${search}`;
         break;
       case Engine.Github:
-        window.location.href = `https://github.com/BangWork/${val}`;
+        window.location.href = `https://github.com/BangWork/${search}`;
         break;
     }
-  }, []);
+  }, [engine, search]);
 
-  const handleKeyUp = (e: any) => {
-    switch (e.key) {
-      case 'Enter':
-        onSearch(search);
-        e.preventDefault();
-        break;
-      case 'Tab':
-        changeSearchEngine();
-        e.preventDefault();
-        break;
-      default:
-        break;
-    }
-  };
+  const handleKeyUp = useCallback(
+    (e: any) => {
+      switch (e.key) {
+        case 'Enter':
+          onSearch();
+          e.preventDefault();
+          break;
+        case 'Tab':
+          changeSearchEngine();
+          e.preventDefault();
+          break;
+        default:
+          break;
+      }
+    },
+    [onSearch, changeSearchEngine]
+  );
 
   return (
     <div className="w-full flex justify-center ">
