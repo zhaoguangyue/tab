@@ -37,16 +37,8 @@ interface DateItemProps {
   date: string | undefined;
 }
 
-const InitDateItem = {
-  id: '',
-  title: '',
-  content: '',
-  date: '',
-};
-
 export const useNotionData = () => {
   const [dataList, setDataList] = useState<DateItemProps[]>([]);
-  const [curData, setCurData] = useState<DateItemProps>(InitDateItem);
   const [loading, setLoading] = useState<boolean>(true);
 
   const notionGet = useCallback(async () => {
@@ -61,7 +53,6 @@ export const useNotionData = () => {
       });
       setLoading(false);
       setDataList(formatResult);
-      setCurData(formatResult[0]);
     } else {
       setLoading(true);
       sendChromeMessage({
@@ -72,14 +63,13 @@ export const useNotionData = () => {
           const formatResult = data.results.map((item: ItemProps) => {
             return {
               id: item.id,
-              title: item.properties.Name.title[0]?.text.content,
-              content: item?.properties.Todo.rich_text[0]?.text.content,
+              title: item.properties.Name.title[0]?.text.content || '',
+              content: item?.properties.Todo.rich_text[0]?.text.content || '',
               date: item.properties.Date.date?.start,
             };
           });
 
           setDataList(formatResult);
-          setCurData(formatResult[0]);
         })
         .finally(() => {
           setLoading(false);
@@ -135,9 +125,7 @@ export const useNotionData = () => {
 
   return {
     dataList,
-    curData,
     loading,
-    setCurData,
     notionGet,
     notionCreate,
     notionUpdate,

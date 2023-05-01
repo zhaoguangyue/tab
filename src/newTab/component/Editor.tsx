@@ -18,15 +18,7 @@ interface EditorProps {
 export const MilkdownEditor = (props: EditorProps) => {
   const { data, update } = props;
   const editorRef = useRef<any>();
-  const [title, setTitle] = useState(data.title);
-  const [content, setContent] = useState('');
-
-  const initVal = useMemo(() => data?.content || '', [data]);
-
-  useEffect(() => {
-    setTitle(data.title);
-    editorIns?.action(replaceAll(initVal));
-  }, [data]);
+  const [content, setContent] = useState(data.content);
 
   useUpdateEffect(() => {
     update(data.id, data.title, content);
@@ -43,7 +35,6 @@ export const MilkdownEditor = (props: EditorProps) => {
       .use(gfm)
       .config((ctx) => {
         const listener = ctx.get(listenerCtx);
-
         listener.markdownUpdated((ctx, markdown, prevMarkdown) => {
           if (markdown !== prevMarkdown) {
             setContent(markdown);
@@ -68,15 +59,7 @@ export const MilkdownEditor = (props: EditorProps) => {
   );
 
   return (
-    <div className="prose prose-stone prose-sm outline-none flex-1 markdown-editor px-6 ">
-      <Input
-        value={title}
-        onChange={(e) => {
-          setTitle(e.target.value);
-        }}
-        size="large"
-        className="bg-slate-50 !shadow-none !border-inherit !rounded-none border-b-0 !text-4xl !px-6 !py-4"
-      />
+    <div className="prose prose-stone prose-sm outline-none flex-1 markdown-editor">
       <Milkdown />
     </div>
   );

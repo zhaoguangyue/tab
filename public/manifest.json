@@ -62,5 +62,11 @@
     "32": "/vite.svg",
     "48": "/vite.svg",
     "128": "/vite.svg"
+  },
+  "externally_connectable": {
+    "matches": ["http://127.0.0.1:5173/"]
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' http://localhost:5173; object-src 'self' http://localhost:5173"
   }
 }

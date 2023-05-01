@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash-es';
 import { Engine, SearchEngine } from '../../constant';
 import { sendChromeMessage } from '../utils';
 import { githubRepo } from '../../constant';
+import DateShow from './DateShow';
 
 export const Search = () => {
   const [index, setIndex] = useState(0);
@@ -87,11 +88,13 @@ export const Search = () => {
   );
 
   return (
-    <div className="w-full flex justify-center ">
+    <div className="w-full flex justify-center items-center flex-col">
+      <div>
+        <DateShow />
+      </div>
       <div className="bg-slate-50 rounded-[30px] focus:shadow-sm">
         <AutoComplete
           className="w-[600px]"
-          size="large"
           bordered={false}
           value={search}
           defaultOpen

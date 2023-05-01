@@ -7,6 +7,7 @@ body {
   height: 100vh;
   /* background: url('../assets/4k.jpg') no-repeat center center; */
   background-size: cover;
+  background: #f8f9f9;
 }
 .App {
   height: 100vh;
@@ -14,45 +15,74 @@ body {
   flex-direction: column;
 }
 
-.milkdown {
-  @apply bg-slate-50 border border-t-0;
-  box-sizing: border-box;
-  height: calc(100% - 82px);
-}
-
-.editor {
-  overflow: scroll;
-  padding: 0 30px;
-  @apply mx-auto;
-}
-
 .prose {
   max-width: 100%;
 }
-.prose :where(ul > li):not(:where([class~="not-prose"] *)) {
+.prose :where(ul > li):not(:where([class~='not-prose'] *)) {
   margin-top: 0em;
   margin-bottom: 0em;
 }
-.prose
-  :where(.prose > ul > li > *:last-child):not(:where([class~="not-prose"] *)) {
+.prose :where(.prose > ul > li > *:last-child):not(:where([class~='not-prose'] *)) {
   margin-top: 0em;
   margin-bottom: 0em;
 }
-.prose :where(p):not(:where([class~="not-prose"] *)) {
+.prose :where(p):not(:where([class~='not-prose'] *)) {
   margin-top: 0em;
   margin-bottom: 0em;
 }
 
-.prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~="not-prose"] *)) {
+.prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *)) {
   font-weight: 400;
 }
 
 .markdown-editor {
-  padding-right: 0;
-  & > div {
-    height: 100%;
+  .milkdown {
+    box-sizing: border-box;
+    height: calc(100% - 82px);
+    .editor {
+      overflow: scroll;
+      margin: 0 auto;
+      height: 100%;
+      min-height: 100px;
+    }
   }
-  .editor {
-    height: 100%;
+}
+
+.ant-descriptions-header {
+  margin-bottom: 10px !important;
+}
+
+.stock-table {
+  th {
+    padding: 8px !important;
+    background-color: #fff;
+    color: #919295 !important;
+    font-weight: normal !important;
+    font-size: 12px !important;
+  }
+  th,
+  td {
+    background-color: #fff !important;
+    border-bottom: 0 none !important;
+    font: 14px/1.231 'BRHendrix-Regular', 'PingFang SC', 'PingFang HK', 'Helvetica Neue', sans-serif,
+      Arial;
+    &::before {
+      display: none;
+    }
+  }
+}
+
+[role='button'] {
+  cursor: default;
+}
+
+.my-calendar {
+  width: 500px;
+  .ant-picker-panel {
+    border-top: 0 none;
+    padding: 0 10px;
+  }
+  td {
+    cursor: default !important;
   }
 }
