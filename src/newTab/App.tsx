@@ -25,7 +25,6 @@ function App() {
   useEffect(() => {
     if (!loading) {
       const last = dataList[0];
-      console.log('file: App.tsx:27 ~ useEffect ~ last:', last);
       setActiveKey([last.id]);
       var now = dayjs().format('YYYY-MM-DD');
       if (now !== last.date) {
@@ -39,7 +38,6 @@ function App() {
       <div className="p-[50px]">
         <Search />
       </div>
-      <MyCalendar />
       <div className="px-[60px] py-[30px] flex flex-col overflow-auto flex-1">
         <div className="flex">
           <div>

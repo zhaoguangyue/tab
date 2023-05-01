@@ -28,15 +28,15 @@ const MyCalendar = () => {
     const jieQi = lunar.getJieQi();
 
     return (
-      <div className={`py-1 mx-1 rounded relative ${isToday ? 'bg-gray' : ''}`}>
+      <div className={`py-2 mx-2 rounded relative ${isToday ? 'bg-gray' : ''}`}>
         <div className="text-lg">{day}</div>
-        <div className="text-xs scale-90">
+        <div className="text-xs ">
           {holiday && <div className="text-blue whitespace-nowrap">{holiday}</div>}
           {jieQi && <div className="text-blue">{jieQi}</div>}
           {!holiday && !jieQi && lunarDay}
         </div>
-        {isWork && <div className="absolute right-1 top-1 text-xs text-red scale-75">班</div>}
-        {isDayOff && <div className="absolute right-1 top-1 text-xs text-green scale-75">休</div>}
+        {isWork && <div className="absolute right-1 top-1 text-xs text-red scale-90">班</div>}
+        {isDayOff && <div className="absolute right-1 top-1 text-xs text-green scale-90">休</div>}
       </div>
     );
   };

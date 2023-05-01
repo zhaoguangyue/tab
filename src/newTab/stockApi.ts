@@ -11,7 +11,6 @@ const market: { [key: number]: string } = {
 
 export const getStock = (stockList: string[]): any => {
   return new Promise((resolve) => {
-    console.log(111);
     $.ajax({
       url: ` https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f2,f3,f12,f13,f14,f17,f18,f221&secids=${stockList.join()}`,
       method: 'get',

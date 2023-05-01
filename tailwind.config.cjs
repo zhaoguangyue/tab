@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require('tailwindcss/colors');
+
 module.exports = {
   content: [
     './index.html',
@@ -9,10 +12,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        green: '#00a843',
-        red: '#f13e3a',
-        blue: '#418ce1',
-        gray: '#f5f5f6',
+        ...colors,
+        green: {
+          DEFAULT: '#00a843',
+        },
+        red: {
+          DEFAULT: '#f13e3a',
+        },
+        blue: {
+          DEFAULT: '#418ce1',
+        },
+        gray: {
+          DEFAULT: '#f5f5f6',
+        },
       },
     },
     spacing: {
