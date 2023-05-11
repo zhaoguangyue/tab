@@ -30,7 +30,7 @@ interface ItemProps {
   [key: string]: any;
 }
 
-interface DateItemProps {
+export interface DateItemProps {
   id: string;
   title: string;
   content: string;
@@ -55,36 +55,52 @@ export const useNotionData = () => {
       setDataList(formatResult);
     } else {
       setLoading(true);
-      sendChromeMessage({
-        action: 'notion',
-        operate: 'query',
-      })
-        .then((data: any) => {
+      sendChromeMessage(
+        {
+          action: 'notion',
+          operate: 'query',
+        },
+        (data: any) => {
           const formatResult = data.results.map((item: ItemProps) => {
             return {
               id: item.id,
-              title: item.properties.Name.title[0]?.text.content || '',
-              content: item?.properties.Todo.rich_text[0]?.text.content || '',
-              date: item.properties.Date.date?.start,
+              title: item.properties.Name?.title?.[0]?.text?.content || '',
+              content: item?.properties.Todo?.rich_text?.[0]?.text?.content || '',
+              date: item.properties.Date?.date?.start,
             };
           });
-
           setDataList(formatResult);
-        })
-        .finally(() => {
           setLoading(false);
-        });
+        },
+        () => setLoading(false)
+      );
     }
   }, []);
 
   const notionCreate = useCallback(async () => {
-    sendChromeMessage({
-      action: 'notion',
-      operate: 'create',
-      payload: {
-        content: '',
+    sendChromeMessage(
+      {
+        action: 'notion',
+        operate: 'create',
+        payload: {
+          content: '',
+        },
       },
-    }).then(() => notionGet());
+      () => notionGet()
+    );
+  }, []);
+
+  const notionDelete = useCallback(async (pageId: string) => {
+    sendChromeMessage(
+      {
+        action: 'notion',
+        operate: 'delete',
+        payload: {
+          pageId,
+        },
+      },
+      () => notionGet()
+    );
   }, []);
 
   const { run } = useDebounceFn(
@@ -129,5 +145,6 @@ export const useNotionData = () => {
     notionGet,
     notionCreate,
     notionUpdate,
+    notionDelete,
   };
 };

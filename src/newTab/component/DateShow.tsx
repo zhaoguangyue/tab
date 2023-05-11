@@ -44,7 +44,7 @@ const DateShow = () => {
           } w-full h-full absolute bg-white flex flex-col`}
         >
           <div className="text-right py-2 px-4 bg-white">
-            <Button onClick={exitFullscreen}>退出全屏</Button>
+            <Button onClick={exitFullscreen}>退出</Button>
           </div>
           <div className="flex-1 flex justify-center items-center bg-gray-50">
             <MyCalendar />

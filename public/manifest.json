@@ -2,15 +2,14 @@
   "name": "tab",
   "version": "1.0",
   "description": "一个tab",
-  "manifest_version": 3,
+  "manifest_version": 2,
   "background": {
-    "service_worker": "background.js",
-    "type": "module"
+    "scripts": ["background.js"]
   },
   "chrome_url_overrides": {
     "newtab": "./tab.html"
   },
-  "permissions": [
+  "optional_permissions": [
     "background",
     "contextMenus",
     "geolocation",
@@ -22,7 +21,7 @@
     "identity",
     "http://*/",
     "https://*/",
-    "chrome://favicon/",
+    "favicon",
     "history",
     "alarms",
     "notifications",
@@ -37,16 +36,7 @@
     "scripting"
   ],
   "host_permissions": ["*://*/*"],
-  "web_accessible_resources": [
-    {
-      "resources": ["/vite.svg"],
-      "matches": ["<all_urls>"]
-    },
-    {
-      "resources": ["insert.js"],
-      "matches": ["<all_urls>"]
-    }
-  ],
+  "web_accessible_resources": [],
   "action": {
     "default_popup": "index.html",
     "default_icon": {
@@ -66,7 +56,6 @@
   "externally_connectable": {
     "matches": ["http://127.0.0.1:5173/"]
   },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' http://localhost:5173; object-src 'self' http://localhost:5173"
-  }
+  "permissions": ["http://*/", "https://*/"],
+  "content_security_policy": "connect-src: https://push2.eastmoney.com https://searchadapter.eastmoney.com; script-src 'self' 'unsafe-eval' https://searchadapter.eastmoney.com; object-src 'self';"
 }

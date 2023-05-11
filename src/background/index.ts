@@ -1,4 +1,4 @@
-import { notionApi, type OperateType } from './notion';
+import { todoApi, fastEntranceApi, type OperateType } from './notion';
 
 const Engine = {
   Baidu: 'baidu',
@@ -49,9 +49,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       (async () => {
         const operate: OperateType = request.operate;
         // @ts-ignore
-        const res = await notionApi[operate](payload);
+        const res = await todoApi[operate](payload);
         sendResponse(res);
-        console.log('file: background.js:154 ~ res:', res);
+      })();
+    case 'fastEntrance':
+      (async () => {
+        const operate: OperateType = request.operate;
+        // @ts-ignore
+        const res = await fastEntranceApi[operate](payload);
+        sendResponse(res);
       })();
   }
   return true;

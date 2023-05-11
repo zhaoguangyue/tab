@@ -12,10 +12,10 @@ const market: { [key: number]: string } = {
 export const getStock = (stockList: string[]): any => {
   return new Promise((resolve) => {
     $.ajax({
-      url: ` https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f2,f3,f12,f13,f14,f17,f18,f221&secids=${stockList.join()}`,
+      url: `https://push2.eastmoney.com/api/qt/ulist.np/get?fltt=2&fields=f2,f3,f12,f13,f14,f17,f18,f221&secids=${stockList.join()}`,
       method: 'get',
       success: (data: any) => {
-        const result = data.data.diff
+        const result = data.data?.diff
           ?.map((item: any) => ({
             name: item.f14,
             current: item.f2,

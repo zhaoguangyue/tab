@@ -170,6 +170,13 @@
   dependencies:
     "tslib" "^2.5.0"
 
+"@milkdown/exception@7.2.1":
+  "integrity" "sha512-xHdCfaM587+jT5kbt6+6vgZ+P5gn8oKfTpRxcSQ8g9y9W9UMgclRxEfPOYmv7xlstTuOJr+1B1n4WMwiavwv2A=="
+  "resolved" "https://registry.npmmirror.com/@milkdown/exception/-/exception-7.2.1.tgz"
+  "version" "7.2.1"
+  dependencies:
+    "tslib" "^2.5.0"
+
 "@milkdown/plugin-listener@^7.2.0":
   "integrity" "sha512-nN6/G1xYLXZ6n4nVpKRiHeaQKFCcgpHifyF/oixvIZZ1SvXlmp5m/rffSEGKXrL8FGs6sMgeqPVL/czVxQqH1A=="
   "resolved" "https://registry.npmmirror.com/@milkdown/plugin-listener/-/plugin-listener-7.2.0.tgz"
@@ -178,6 +185,18 @@
     "@milkdown/utils" "7.2.0"
     "@types/lodash.debounce" "^4.0.7"
     "lodash.debounce" "^4.0.8"
+    "tslib" "^2.5.0"
+
+"@milkdown/plugin-slash@^7.2.1":
+  "integrity" "sha512-fMAI9Tw0eZgQLPn8cxb+jhMNdQP+yJ9ouc5x8ER4kyJ98lZeIHtWjerE7MxdOQTcA0Xn1+Z/zV3AHUGcyNVyMw=="
+  "resolved" "https://registry.npmmirror.com/@milkdown/plugin-slash/-/plugin-slash-7.2.1.tgz"
+  "version" "7.2.1"
+  dependencies:
+    "@milkdown/exception" "7.2.1"
+    "@milkdown/utils" "7.2.1"
+    "@types/lodash.debounce" "^4.0.7"
+    "lodash.debounce" "^4.0.8"
+    "tippy.js" "^6.3.7"
     "tslib" "^2.5.0"
 
 "@milkdown/preset-commonmark@^7.2.0":
@@ -262,6 +281,15 @@
     "nanoid" "^4.0.0"
     "tslib" "^2.5.0"
 
+"@milkdown/utils@7.2.1":
+  "integrity" "sha512-X1PioEtMYLExh5q3u+gD+9axHUbce76IDbr0fC8q02LnJIxfI6MGUdajcXAB3Ny2aZEDzkd7w+O7Q5Eo7DMHng=="
+  "resolved" "https://registry.npmmirror.com/@milkdown/utils/-/utils-7.2.1.tgz"
+  "version" "7.2.1"
+  dependencies:
+    "@milkdown/exception" "7.2.1"
+    "nanoid" "^4.0.0"
+    "tslib" "^2.5.0"
+
 "@nodelib/fs.scandir@2.1.5":
   "integrity" "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="
   "resolved" "https://registry.npmmirror.com/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -290,6 +318,27 @@
   dependencies:
     "@types/node-fetch" "^2.5.10"
     "node-fetch" "^2.6.1"
+
+"@popperjs/core@^2.9.0":
+  "integrity" "sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw=="
+  "resolved" "https://registry.npmmirror.com/@popperjs/core/-/core-2.11.7.tgz"
+  "version" "2.11.7"
+
+"@prosemirror-adapter/core@0.2.4":
+  "integrity" "sha512-eGnTK7PDTZlhPGUAA7l6m7Nc8EsdQBhOGgFk07zxuETSCk0F5A3/RtW8rcL5F4mcrVXqa+Z7sc/ovqL6tQglvA=="
+  "resolved" "https://registry.npmmirror.com/@prosemirror-adapter/core/-/core-0.2.4.tgz"
+  "version" "0.2.4"
+  dependencies:
+    "tslib" "^2.4.0"
+
+"@prosemirror-adapter/react@^0.2.4":
+  "integrity" "sha512-ELQjaTAiJ0WB84hscR+Gpb+iD8wGup7vESCUbIIspDr8eq8G90R2juKYUBeAI8s0II8y/AtFXH+90cykeNqC7A=="
+  "resolved" "https://registry.npmmirror.com/@prosemirror-adapter/react/-/react-0.2.4.tgz"
+  "version" "0.2.4"
+  dependencies:
+    "@prosemirror-adapter/core" "0.2.4"
+    "nanoid" "^4.0.0"
+    "tslib" "^2.4.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   "integrity" "sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ=="
@@ -2905,6 +2954,13 @@
   "resolved" "https://registry.npmmirror.com/throttle-debounce/-/throttle-debounce-5.0.0.tgz"
   "version" "5.0.0"
 
+"tippy.js@^6.3.7":
+  "integrity" "sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ=="
+  "resolved" "https://registry.npmmirror.com/tippy.js/-/tippy.js-6.3.7.tgz"
+  "version" "6.3.7"
+  dependencies:
+    "@popperjs/core" "^2.9.0"
+
 "to-regex-range@^5.0.1":
   "integrity" "sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ=="
   "resolved" "https://registry.npmmirror.com/to-regex-range/-/to-regex-range-5.0.1.tgz"
@@ -2949,7 +3005,7 @@
   "resolved" "https://registry.npmmirror.com/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz"
   "version" "0.1.13"
 
-"tslib@^2.0.0", "tslib@^2.4.1", "tslib@^2.5.0":
+"tslib@^2.0.0", "tslib@^2.4.0", "tslib@^2.4.1", "tslib@^2.5.0":
   "integrity" "sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg=="
   "resolved" "https://registry.npmmirror.com/tslib/-/tslib-2.5.0.tgz"
   "version" "2.5.0"

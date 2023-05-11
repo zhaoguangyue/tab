@@ -6,13 +6,17 @@ import { noop } from 'lodash-es';
  * @param message 消息
  */
 export const isDev = process.env.NODE_ENV !== 'production';
-export function sendChromeMessage(message: any) {
+export const pluginId = 'hidpcnlgfkdiegpcihlfnbbmnokihpon';
+
+export function sendChromeMessage(message: any, resolveCb?: any, rejectCb?: any) {
   if (isDev) {
     return Promise.resolve();
   }
-  return new Promise((resolve) => {
+  return new Promise((resolve: any) => {
     // @ts-ignore
-    chrome.runtime.sendMessage('hidpcnlgfkdiegpcihlfnbbmnokihpon', message, resolve);
+    chrome.runtime.sendMessage(pluginId, message, (val) => {
+      resolve(val).then(resolveCb).catch(rejectCb);
+    });
   });
 }
 

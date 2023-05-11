@@ -36,6 +36,9 @@ module.exports = {
       6: '30px',
     },
   },
+  corePlugins: {
+    preflight: false,
+  },
   plugins: [require('@tailwindcss/typography')],
 };
 118, 170, 98;

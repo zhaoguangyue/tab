@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { AutoComplete, Row, Col, Table, Dropdown } from 'antd';
 import { MenuOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useUpdateEffect, useBoolean } from 'ahooks';
+import { useUpdateEffect, useBoolean, useInterval } from 'ahooks';
 import { getStock, searchStock, type StockData } from '../stockApi';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
@@ -12,6 +12,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import dayjs from 'dayjs';
 
 const getColor = (val: number) => (val > 0 ? 'text-red' : val < 0 ? 'text-green' : '');
 let stockList: string[] = JSON.parse(localStorage.getItem('stockList') || '[]');
@@ -35,6 +36,7 @@ export const Stock = () => {
       {
         title: '股票名称',
         dataIndex: 'name',
+        width: 140,
         render: (text: string, record: any) => {
           const href =
             record.market && record.lastUpdateTime
@@ -50,6 +52,7 @@ export const Stock = () => {
       {
         title: '最新价',
         dataIndex: 'current',
+        width: 80,
         render: (text: number, record: any) => (
           <span className={getColor(record.fluctuationRate)}>{text}</span>
         ),
@@ -57,6 +60,7 @@ export const Stock = () => {
       {
         title: '今开',
         dataIndex: 'todayStart',
+        width: 80,
         render: (text: number, record: any) => (
           <span className={getColor(record.fluctuationRate)}>{text}</span>
         ),
@@ -64,6 +68,7 @@ export const Stock = () => {
       { title: '昨收', dataIndex: 'yesterdayEnd' },
       {
         title: '涨跌幅',
+        width: 90,
         dataIndex: 'fluctuationRate',
         render: (text: number) => <span className={getColor(text)}>{text}%</span>,
       },
@@ -98,16 +103,20 @@ export const Stock = () => {
   }, [value]);
 
   const getStockData = useCallback(() => {
-    getStock(stockList).then((res: any[][]) => {
-      setStockData(res);
-    });
-  }, [stockList]);
+    if ((dayjs().hour() > 9 && dayjs().hour() < 16) || !stockData.length) {
+      getStock(stockList).then((res: any[][]) => {
+        setStockData(res);
+      });
+    }
+  }, [stockList, stockData]);
 
   const deleteStock = useCallback((code: string) => {
     stockList = stockList.filter((item) => !item.includes(code));
     localStorage.setItem('stockList', JSON.stringify(stockList));
     getStockData();
   }, []);
+
+  useInterval(getStockData, 5000);
 
   useEffect(() => {
     getStockData();
@@ -118,7 +127,6 @@ export const Stock = () => {
       setStockData((previous) => {
         const activeIndex = previous.findIndex((i: any) => i.code === active.id);
         const overIndex = previous.findIndex((i: any) => i.code === over?.id);
-        console.log(arrayMove(previous, activeIndex, overIndex));
         const newSort = arrayMove(previous, activeIndex, overIndex);
         localStorage.setItem('stockList', JSON.stringify(newSort.map((i: any) => i.fullCode)));
         return newSort;
@@ -150,7 +158,7 @@ export const Stock = () => {
     };
 
     return (
-      <tr {...props} ref={setNodeRef} style={style} {...attributes}>
+      <tr {...props} ref={setNodeRef} style={style} {...attributes} key={props['data-row-key']}>
         {React.Children.map(children, (child) => {
           if ((child as React.ReactElement).key === 'sort' && edit) {
             return React.cloneElement(child as React.ReactElement, {

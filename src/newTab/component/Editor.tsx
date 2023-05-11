@@ -1,15 +1,12 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { defaultValueCtx, Editor, rootCtx } from '@milkdown/core';
 import { Milkdown, useEditor } from '@milkdown/react';
 import { commonmark } from '@milkdown/preset-commonmark';
 import { nord } from '@milkdown/theme-nord';
 import { gfm } from '@milkdown/preset-gfm';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
-import { replaceAll, getMarkdown } from '@milkdown/utils';
-import { sendChromeMessage } from '../utils';
 import '@milkdown/theme-nord/style.css';
 import { useUpdateEffect, useKeyPress } from 'ahooks';
-import { Input } from 'antd';
 
 interface EditorProps {
   data: any;
@@ -18,7 +15,7 @@ interface EditorProps {
 export const MilkdownEditor = (props: EditorProps) => {
   const { data, update } = props;
   const editorRef = useRef<any>();
-  const [content, setContent] = useState(data.content);
+  const [content, setContent] = useState(data?.content);
 
   useUpdateEffect(() => {
     update(data.id, data.title, content);
@@ -43,8 +40,6 @@ export const MilkdownEditor = (props: EditorProps) => {
       })
       .use(listener);
   }, []);
-
-  const editorIns = editorRef.current.get();
 
   useKeyPress(
     ['meta.s', 'ctrl.s'],
