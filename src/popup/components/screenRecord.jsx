@@ -68,45 +68,31 @@ const ScreenRecord = () => {
     // });
     // recorder.current.startRecording();
 
-    // chrome.scripting.executeScript({
-    //   target: { tabId: tab.id },
-    //   func: async () => {
-    //     const stream = await navigator.mediaDevices.getDisplayMedia({
-    //       audio: true,
-    //       video: true,
-    //       preferCurrentTab: true,
-    //     });
-    //     recorder.current = new RecordRTC.GifRecorder(stream, {
-    //       type: 'video',
-    //     });
-    //     recorder.current.startRecording();
-    //   },
-    //   // files: ['../js/content.js'],
-    // });
-
-    const stream = await navigator.mediaDevices.getDisplayMedia({
-      audio: true,
-      video: true,
-      preferCurrentTab: true,
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        navigator.mediaDevices
+          .getDisplayMedia({
+            audio: true,
+            video: true,
+            preferCurrentTab: true,
+          })
+          .then((stream) => {
+            console.log('file: screenRecord.jsx:81 ~ .then ~ stream:', stream);
+            const recorder = new RecordRTC.GifRecorder(stream, {
+              type: 'video',
+            });
+            stream.oninactive = () => {
+              console.log('停止');
+            };
+            recorder.startRecording();
+          })
+          .catch(() => {
+            console.log(1111);
+          });
+      },
+      // files: ['../js/content.js'],
     });
-    recorder.current = new RecordRTC.GifRecorder(stream, {});
-    // recorder.current.startRecording();
-    recorder.current.record();
-
-    setTimeout(() => {
-      recorder.current.stop(function (blob) {
-        // this.save('aaaa.webm');
-        var img = document.createElement('img');
-        img.src = URL.createObjectURL(blob);
-        document.body.appendChild(img);
-
-        // const aTag = document.createElement('a');
-        // aTag.href = URL.createObjectURL(recorder.current.blob);
-        // aTag.download = `${new Date()}.gif`;
-        // document.body.appendChild(aTag);
-        // aTag.click();
-      });
-    }, 2000);
 
     // stream.onended = () => {
     //   // Click on browser UI stop sharing button
@@ -266,3 +252,57 @@ export default ScreenRecord;
 //     });
 // }
 // // </script>
+
+// git录制
+// var image = document.querySelector('img');
+
+// function captureCamera(callback) {
+//     navigator.mediaDevices.getUserMedia({ video: true }).then(function(camera) {
+//         callback(camera);
+//     }).catch(function(error) {
+//         alert('Unable to capture your camera. Please check console logs.');
+//         console.error(error);
+//     });
+// }
+
+// function stopRecordingCallback() {
+//     document.querySelector('h1').innerHTML = 'Gif recording stopped: ' + bytesToSize(recorder.getBlob().size);
+//     image.src = URL.createObjectURL(recorder.getBlob());
+//     recorder.camera.stop();
+//     recorder.destroy();
+//     recorder = null;
+// }
+
+// var recorder; // globally accessible
+
+// document.getElementById('btn-start-recording').onclick = function() {
+//     this.disabled = true;
+//     captureCamera(function(camera) {
+//         document.querySelector('h1').innerHTML = 'Waiting for Gif Recorder to start...';
+//         recorder = RecordRTC(camera, {
+//             type: 'gif',
+//             frameRate: 1,
+//             quality: 10,
+//             width: 360,
+//             hidden: 240,
+//             onGifRecordingStarted: function() {
+//                 document.querySelector('h1').innerHTML = 'Gif recording started.';
+//             },
+//             onGifPreview: function(gifURL) {
+//                 image.src = gifURL;
+//             }
+//         });
+
+//         recorder.startRecording();
+
+//         // release camera on stopRecording
+//         recorder.camera = camera;
+
+//         document.getElementById('btn-stop-recording').disabled = false;
+//     });
+// };
+
+// document.getElementById('btn-stop-recording').onclick = function() {
+//     this.disabled = true;
+//     recorder.stopRecording(stopRecordingCallback);
+// };
