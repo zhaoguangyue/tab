@@ -1,25 +1,11 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import {
-  Dropdown,
-  Modal,
-  Tabs,
-  Tree,
-  Form,
-  Input,
-  Upload,
-  Image,
-  Avatar,
-  Badge,
-  Space,
-  Typography,
-  type TabsProps,
-} from 'antd';
+import { Dropdown, Modal, Tabs, Tree, Form, Input, Avatar, Typography, type TabsProps } from 'antd';
 import { useBoolean, useClickAway } from 'ahooks';
 import { bookmarks as mockData } from '../mockdata';
-import { isDev, pluginId } from '../utils';
+import { pluginId } from '../utils';
 import { mock } from 'node:test';
 import { FolderOutlined, CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { useFastEntrance } from '../fastEntraceApi';
+import { useFastEntrance } from '../dao/fastEntraceApi';
 import { fastEntranceApi } from '../../background/notion';
 import { isEmpty, find } from 'lodash-es';
 
@@ -39,14 +25,10 @@ const FastEntrance = () => {
   let [bookmarks, setBookmarks] = useState<any[]>([]);
 
   useEffect(() => {
-    if (isDev) {
-      setBookmarks(mockData[0].children);
-    } else {
-      // @ts-ignore
-      chrome.bookmarks.getTree(function (res: any) {
-        setBookmarks(res[0].children as any);
-      });
-    }
+    // @ts-ignore
+    chrome.bookmarks.getTree(function (res: any) {
+      setBookmarks(res[0].children as any);
+    });
   }, []);
 
   const Icon = (props: any) => {
@@ -54,12 +36,11 @@ const FastEntrance = () => {
     if (props.data.children) {
       icon = <FolderOutlined />;
     } else {
-      icon = (
-        <img
-          className="w-3 h-3"
-          src={`chrome-extension://${pluginId}/_favicon/?pageUrl=${props.url || ''}&size=64`}
-        />
-      );
+      // @ts-ignore
+      const url = new URL(chrome.runtime.getURL('/_favicon/'));
+      url.searchParams.set('pageUrl', props.url);
+      url.searchParams.set('size', '64');
+      icon = <img className="w-3 h-3" src={url.toString()} />;
     }
     return <div className="inline-flex items-center align-[-3px]">{icon}</div>;
   };
@@ -128,12 +109,16 @@ const FastEntrance = () => {
           layout="vertical"
           style={{ maxWidth: 600 }}
           onValuesChange={onValuesChange}
+          labelCol={{ span: 24 }}
         >
           <Form.Item name="name" label="名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="url" label="URL" rules={[{ required: true }]}>
+          <Form.Item name="url" label="链接地址" rules={[{ required: true }]}>
             <Input />
+          </Form.Item>
+          <Form.Item name="icon" label="图标地址">
+            <Input placeholder="请输入地址或文字" />
           </Form.Item>
         </Form>
       ),
@@ -164,6 +149,7 @@ const FastEntrance = () => {
         <div className="flex">
           {dataList.map((item: any) => (
             <Dropdown
+              key={item.id}
               menu={{
                 items: [
                   { key: 'edit', label: '编辑', onClick: () => onEditEntrance(item) },
@@ -178,16 +164,13 @@ const FastEntrance = () => {
             >
               <a
                 key={item.id}
-                className="m-3 text-center no-underline relative bg-gray-50 p-2 block w-[120px] h-[100px] rounded-lg"
+                className="m-3 text-center no-underline relative bg-gray-50 p-2 block w-[120px] h-[100px] rounded-lg "
                 href={item.url}
               >
-                <Avatar
-                  src={item.icon || `https://www.google.com/s2/favicons?domain=${item.url}&sz=96`}
-                  alt={item.name.slice(0, 4)}
-                  shape="circle"
-                  size={60}
-                />
-                <div className="max-w-[90px] overflow-hidden">
+                <Avatar src={item.icon || ''} alt={item.name.slice(0, 4)} shape="circle" size={60}>
+                  {item.icon.slice(0, 4)}
+                </Avatar>
+                <div className="overflow-hidden mt-1">
                   <Typography.Text ellipsis className="h-4 block align-top">
                     {item.name}
                   </Typography.Text>

@@ -103,7 +103,7 @@ class FastEntranceApi extends NotionApi {
         Icon: {
           rich_text: [
             {
-              text: { content: icon },
+              text: { content: icon || '' },
             },
           ],
         },
@@ -129,7 +129,7 @@ class FastEntranceApi extends NotionApi {
         Icon: {
           rich_text: [
             {
-              text: { content: icon },
+              text: { content: icon || '' },
             },
           ],
         },

@@ -5,7 +5,8 @@ import { commonmark } from '@milkdown/preset-commonmark';
 import { nord } from '@milkdown/theme-nord';
 import { gfm } from '@milkdown/preset-gfm';
 import { listener, listenerCtx } from '@milkdown/plugin-listener';
-import '@milkdown/theme-nord/style.css';
+// import '@milkdown/theme-nord/style.css';
+import '../style/editor.scss';
 import { useUpdateEffect, useKeyPress } from 'ahooks';
 
 interface EditorProps {

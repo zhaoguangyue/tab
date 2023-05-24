@@ -1,6 +1,5 @@
 import $ from 'jquery';
-import { jsonp } from './utils';
-import { method } from 'lodash-es';
+import { jsonp } from '../utils';
 
 const market: { [key: number]: string } = {
   0: 'SZ',

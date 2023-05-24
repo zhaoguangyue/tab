@@ -1,19 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import dayjs from 'dayjs';
-import '@milkdown/theme-nord/style.css';
-import { Button, Divider, Descriptions, Collapse, Typography } from 'antd';
 import { useFavicon } from 'ahooks';
 import favicon from '../assets/favicon.svg';
-import { MilkdownEditor } from './component/Editor';
 import { Search } from './component/Search';
-import { useNotionData } from './notionApi';
-import { getStock } from './stockApi';
 import { Stock } from './component/Stock';
-import MyCalendar from './component/Calendar';
 import Todo from './component/Todo';
 import FastEntrance from './component/FastEntrance';
-
-const { Panel } = Collapse;
+import Remind from './component/Remind';
+import DateShow from './component/DateShow';
 
 function App() {
   useFavicon(favicon);
@@ -21,7 +13,20 @@ function App() {
   return (
     <div className="App">
       <div className="p-[50px]">
-        <Search />
+        <div className="w-full flex justify-center items-center flex-col">
+          <div>
+            <DateShow />
+          </div>
+          <div className="w-[600px]">
+            <Search />
+          </div>
+          <div>
+            <div>录屏，https://developer.chrome.com/docs/extensions/mv3/screen_capture/</div>
+            <div>
+              接口代理及篡改数据 https://developer.chrome.com/docs/extensions/reference/proxy/
+            </div>
+          </div>
+        </div>
       </div>
       <div className="px-[60px] py-[30px] flex flex-col overflow-auto flex-1">
         <div className="flex justify-between">
@@ -36,6 +41,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Remind />
     </div>
   );
 }

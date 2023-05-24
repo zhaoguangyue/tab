@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html body {
+  text-align: left;
+}
+
+.global-search-modal {
+  .tab-modal-content {
+    padding: 10px !important;
+  }
+}

@@ -25,9 +25,14 @@ module.exports = {
         gray: {
           DEFAULT: '#f5f5f6',
         },
+        nord: {
+          10: '#2e3440',
+          ...colors.gray,
+        },
       },
     },
     spacing: {
+      0: '0px',
       1: '5px',
       2: '10px',
       3: '15px',

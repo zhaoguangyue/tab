@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { MilkdownEditor } from './Editor';
 import { MilkdownProvider } from '@milkdown/react';
-import { useNotionData, type DateItemProps } from '../notionApi';
+import { useTodo, type DateItemProps } from '../dao/todoApi';
 import dayjs from 'dayjs';
 import { Button, Modal, Timeline } from 'antd';
 import ReactMarkdown from 'react-markdown';
 
 const Todo = () => {
-  const { dataList, loading, notionCreate, notionUpdate, notionDelete } = useNotionData();
+  const { dataList, loading, notionCreate, notionUpdate, notionDelete } = useTodo();
   const [openHistory, setOpenHistory] = useState(false);
   const [last, setLast] = useState<DateItemProps>();
   useEffect(() => {
@@ -15,12 +15,6 @@ const Todo = () => {
       const last = dataList[0] || {};
       setLast(last);
       var now = dayjs().format('YYYY-MM-DD');
-      console.log(
-        'file: Todo.tsx:19 ~ useEffect ~ now !== last.date:',
-        now,
-        last,
-        now !== last.date
-      );
       if (now !== last.date) {
         notionCreate();
       }

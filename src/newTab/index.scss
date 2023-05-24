@@ -1,31 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 body {
   width: 100vw;
   height: 100vh;
   /* background: url('../assets/4k.jpg') no-repeat center center; */
   background-size: cover;
   background: #f8f9f9;
-}
-.App {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.prose {
-  max-width: 100%;
-}
-
-.prose :where(p, li, li > *:last-child):not(:where([class~='not-prose'] *)) {
-  margin-top: 0em;
-  margin-bottom: 0em;
-}
-
-.prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *)) {
-  font-weight: 400;
 }
 
 .markdown-editor {
@@ -77,6 +58,9 @@ body {
   }
   td {
     cursor: default !important;
+  }
+  th {
+    height: 40px !important;
   }
 }
 

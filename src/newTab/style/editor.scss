@@ -1,0 +1,98 @@
+@import 'prosemirror-view/style/prosemirror.css';
+
+@import 'prosemirror-tables/style/tables.css';
+
+.milkdown-theme-nord blockquote {
+  @apply not-italic font-serif border-l-4 border-nord-10 pl-4;
+}
+
+.milkdown-theme-nord code {
+  @apply text-nord-10 font-mono font-normal;
+}
+
+.milkdown-theme-nord {
+  pre code {
+    @apply text-inherit;
+  }
+}
+
+.milkdown-theme-nord img {
+  @apply max-w-full inline-block;
+  @apply my-0 #{!important};
+}
+
+.milkdown-theme-nord.prose :where(blockquote):not(:where([class~='not-prose'] *)) {
+  @apply font-normal;
+}
+
+.milkdown-theme-nord.prose :where(ol > li):not(:where([class~='not-prose'] *))::marker,
+.milkdown-theme-nord.prose :where(ul > li):not(:where([class~='not-prose'] *))::marker {
+  @apply text-nord-10;
+}
+
+.milkdown-theme-nord.prose
+  :where(blockquote p:first-of-type):not(:where([class~='not-prose'] *))::before,
+.milkdown-theme-nord.prose
+  :where(blockquote p:first-of-type):not(:where([class~='not-prose'] *))::after {
+  content: '';
+}
+
+.milkdown-theme-nord.prose :where(code):not(:where([class~='not-prose'] *))::before,
+.milkdown-theme-nord.prose :where(code):not(:where([class~='not-prose'] *))::after {
+  content: '';
+}
+
+.milkdown-theme-nord.prose .tableWrapper {
+  @apply mb-2 overflow-x-auto relative;
+}
+
+.milkdown-theme-nord.prose table {
+  @apply text-sm shadow-md sm:rounded-lg;
+  @apply overflow-visible m-4 #{!important};
+}
+
+.milkdown-theme-nord.prose {
+  td,
+  th {
+    @apply py-3 px-6 #{!important};
+  }
+}
+
+.milkdown-theme-nord.prose tr {
+  @apply border-b border-gray-200 dark:border-gray-600;
+}
+
+.milkdown-theme-nord.prose :where(td, th) p {
+  @apply m-0 #{!important};
+}
+
+.milkdown-theme-nord.prose :where(td, th):nth-child(odd) {
+  @apply bg-gray-50 dark:bg-gray-900;
+}
+
+.milkdown-theme-nord.prose.ProseMirror .selectedCell:after {
+  @apply bg-nord-200;
+}
+
+/* A little workaround to turn the element into a space */
+.milkdown-theme-nord.prose br[data-is-inline='true'],
+.milkdown-theme-nord.prose br[data-is-inline='true']::after {
+  content: ' ';
+}
+
+.prose.prose {
+  max-width: 100%;
+}
+
+.prose.prose :where(p, li, li > *:last-child):not(:where([class~='not-prose'] *)) {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+.prose.prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *)) {
+  font-weight: 400;
+}
+
+.prose.prose :where(ol):not(:where([class~='not-prose'] *)) {
+  margin: 0.5em 0;
+}

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { AutoComplete, Row, Col, Table, Dropdown } from 'antd';
 import { MenuOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useUpdateEffect, useBoolean, useInterval } from 'ahooks';
-import { getStock, searchStock, type StockData } from '../stockApi';
+import { getStock, searchStock, type StockData } from '../dao/stockApi';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
 import {
@@ -26,10 +26,6 @@ export const Stock = () => {
   const [suggest, setSuggest] = useState<StockData[]>([]);
   const [stockData, setStockData] = useState<any[][]>([]);
   const [edit, { toggle: toggleEdit }] = useBoolean(false);
-
-  const menu = [
-    { key: 'startEdit', label: !edit ? '设置' : '完成设置', onClick: () => toggleEdit() },
-  ];
 
   const columns = useMemo(() => {
     let _columns: any = [
@@ -188,7 +184,14 @@ export const Stock = () => {
 
   return (
     <div>
-      <Dropdown menu={{ items: menu }} trigger={['contextMenu']}>
+      <Dropdown
+        menu={{
+          items: [
+            { key: 'startEdit', label: !edit ? '设置' : '完成设置', onClick: () => toggleEdit() },
+          ],
+        }}
+        trigger={['contextMenu']}
+      >
         <div className="p-4 bg-white w-[500px]">
           {edit && (
             <AutoComplete
