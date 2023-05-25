@@ -16,6 +16,7 @@ export default defineConfig({
       input: {
         popup: resolve(__dirname, './popup.html'),
         newTab: resolve(__dirname, './tab.html'),
+        videos: resolve(__dirname, './video.html'),
       },
     },
   },
