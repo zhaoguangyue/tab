@@ -1,7 +1,7 @@
 import { forwardRef, useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { AutoComplete, Input, Avatar } from 'antd';
 import { isEmpty, isObject } from 'lodash-es';
-import { useControllableValue } from 'ahooks';
+import { useControllableValue, useDebounceFn } from 'ahooks';
 import { Engine, SearchEngine } from '../../constant';
 import { githubRepo } from '../../constant';
 import { SearchFunc } from '../../background/search';
@@ -64,24 +64,28 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
     handleSearch();
   }, [search, engine]);
 
-  const onSearch = useCallback(
+  const { run: onSearch } = useDebounceFn(
     (searchVal: string) => {
-      if (isContentScript) {
-        return;
-      }
+      let href = '';
       switch (engine) {
         case Engine.Google:
-          window.location.href = `https://www.google.com/search?q=${searchVal}&sourceid=chrome&ie=UTF-8`;
+          href = `https://www.google.com/search?q=${searchVal}&sourceid=chrome&ie=UTF-8`;
           break;
         case Engine.Baidu:
-          window.location.href = `https://www.baidu.com/s?wd=${searchVal}`;
+          href = `https://www.baidu.com/s?wd=${searchVal}`;
           break;
         case Engine.Github:
-          window.location.href = searchVal;
+          href = searchVal;
           break;
       }
+      if (isContentScript) {
+        window.open(href);
+        return;
+      } else {
+        window.location.href = href;
+      }
     },
-    [engine]
+    { wait: 0 }
   );
 
   const handleKeyUp = useCallback(

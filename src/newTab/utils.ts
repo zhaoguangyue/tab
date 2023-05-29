@@ -18,5 +18,5 @@ export const isToday = () => {
   if (cacheToday !== today) {
     localStorage.setItem('today', today);
   }
-  return cacheToday !== today;
+  return cacheToday === today;
 };
