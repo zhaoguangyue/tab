@@ -68,7 +68,7 @@ const FastEntrance = () => {
   const onFinish = useCallback(async () => {
     const doFinish = new Promise((resolve) => {
       if (tab === 'custom') {
-        form.validateFields().then(() => {
+        form.validateFields().then((values) => {
           resolve(newEntrance);
         });
       } else if (!isEmpty(newBookmarkEntrance)) {
@@ -164,10 +164,10 @@ const FastEntrance = () => {
             >
               <a
                 key={item.id}
-                className="m-3 text-center no-underline relative bg-gray-50 p-2 block w-[120px] h-[100px] rounded-lg "
+                className="m-3 text-center no-underline relative p-2 block w-[120px] h-[100px] rounded-lg "
                 href={item.url}
               >
-                <Avatar src={item.icon || ''} alt={item.name.slice(0, 4)} shape="circle" size={60}>
+                <Avatar src={item.icon || ''} alt={item.name.slice(0, 4)} shape="square" size={60}>
                   {item.icon.slice(0, 4)}
                 </Avatar>
                 <div className="overflow-hidden mt-1">
@@ -178,7 +178,7 @@ const FastEntrance = () => {
               </a>
             </Dropdown>
           ))}
-          <div className="m-3 bg-gray-50 w-[120px] h-[100px] rounded-lg flex justify-center items-center">
+          <div className="m-3 w-[120px] h-[100px] rounded-lg flex justify-center items-center">
             <PlusOutlined className="text-6xl text-gray-500" onClick={toggleOpen} />
           </div>
         </div>

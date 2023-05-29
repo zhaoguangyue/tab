@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import { jsonp } from '../utils';
 
 const market: { [key: number]: string } = {
   0: 'SZ',
@@ -44,12 +43,15 @@ export interface StockData {
 }
 export const searchStock = (val: string): any => {
   return new Promise((resolve) => {
-    jsonp(
-      `https://searchadapter.eastmoney.com/api/suggest/get?cb=cb&input=${val}&type=14&count=8`,
-      (data: any) => {
-        resolve((data?.QuotationCodeTable?.Data as StockData[]) || []);
-      }
-    );
+    $.ajax({
+      method: 'get',
+      url: `https://searchadapter.eastmoney.com/api/suggest/get?cb=cb&input=${val}&type=14&count=8`,
+      success: (data: any) => {
+        const result = JSON.parse(data.slice(3, -1));
+        resolve((result?.QuotationCodeTable?.Data as StockData[]) || []);
+      },
+      error: (err: any) => {},
+    });
   });
 };
 

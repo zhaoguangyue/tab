@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { fastEntranceApi } from './notion';
-import dayjs from 'dayjs';
+import { isToday } from '../utils';
 
 interface ItemProps {
   id: string;
@@ -46,19 +46,13 @@ export const useFastEntrance = () => {
             icon: item.properties.Icon.rich_text?.[0]?.text?.content || '',
           };
         }) || [];
-      localStorage.setItem(
-        'fastEntrance',
-        JSON.stringify({
-          lastUpdateTime: dayjs().format('YYYY-MM-DD'),
-          data: formatResult,
-        })
-      );
+      localStorage.setItem('fastEntrance', JSON.stringify(formatResult));
       setDataList(formatResult);
       setLoading(false);
     });
   }, []);
 
-  const notionCreate = useCallback(async (...params: any) => {
+  const notionCreate = useCallback(async (params: any) => {
     fastEntranceApi.create(params).then(() => notionGet());
   }, []);
 
@@ -66,7 +60,7 @@ export const useFastEntrance = () => {
     fastEntranceApi.delete({ pageId }).then(() => notionGet());
   }, []);
 
-  const notionUpdate = useCallback(async (...params: any) => {
+  const notionUpdate = useCallback(async (params: any) => {
     fastEntranceApi.update(params).then(() => {
       const newDataList = dataList.map((item: DateItemProps) => {
         if (item.id === params.pageId) {
@@ -82,9 +76,9 @@ export const useFastEntrance = () => {
   }, []);
 
   useEffect(() => {
-    const cacheFastEntrance = JSON.parse(localStorage.getItem('fastEntrance') || '');
-    if (cacheFastEntrance && cacheFastEntrance.lastUpdateTime === dayjs().format('YYYY-MM-DD')) {
-      setDataList(cacheFastEntrance.data);
+    const cacheFastEntrance = JSON.parse(localStorage.getItem('fastEntrance') || '[]');
+    if (cacheFastEntrance && isToday()) {
+      setDataList(cacheFastEntrance);
       return;
     } else {
       notionGet();

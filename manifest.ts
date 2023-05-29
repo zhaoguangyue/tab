@@ -15,8 +15,6 @@ const devContentScriptsInject = {
   matches: ['*://*/*'],
 };
 
-// console.log(env.mode);
-
 export default defineManifest(async (env) => ({
   manifest_version: 3,
   name: 'tab',
@@ -82,7 +80,7 @@ export default defineManifest(async (env) => ({
     128: 'public/vite.svg',
   },
   externally_connectable: {
-    matches: ['http://127.0.0.1:5173/'],
+    matches: ['http://127.0.0.1:5173/', 'http://localhost:5173/'],
   },
   content_security_policy: {
     extension_pages: "script-src 'self'; object-src 'self';",

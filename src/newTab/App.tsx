@@ -6,9 +6,11 @@ import Todo from './component/Todo';
 import FastEntrance from './component/FastEntrance';
 import Remind from './component/Remind';
 import DateShow from './component/DateShow';
+import { getUserRepositories } from './dao/github';
 
 function App() {
   useFavicon(favicon);
+  getUserRepositories();
 
   return (
     <div className="App">
@@ -19,12 +21,6 @@ function App() {
           </div>
           <div className="w-[600px]">
             <Search />
-          </div>
-          <div>
-            <div>录屏，https://developer.chrome.com/docs/extensions/mv3/screen_capture/</div>
-            <div>
-              接口代理及篡改数据 https://developer.chrome.com/docs/extensions/reference/proxy/
-            </div>
           </div>
         </div>
       </div>

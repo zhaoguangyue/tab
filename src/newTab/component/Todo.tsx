@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { MilkdownEditor } from './Editor';
 import { MilkdownProvider } from '@milkdown/react';
 import { useTodo, type DateItemProps } from '../dao/todoApi';
-import dayjs from 'dayjs';
 import { Button, Modal, Timeline } from 'antd';
 import ReactMarkdown from 'react-markdown';
+import { isToday } from '../utils';
 
 const Todo = () => {
   const { dataList, loading, notionCreate, notionUpdate, notionDelete } = useTodo();
@@ -14,12 +14,11 @@ const Todo = () => {
     if (!loading) {
       const last = dataList[0] || {};
       setLast(last);
-      var now = dayjs().format('YYYY-MM-DD');
-      if (now !== last.date) {
+      if (!isToday()) {
         notionCreate();
       }
     }
-  }, [loading]);
+  }, [dataList, loading]);
 
   const viewHistory = useCallback(() => {
     setOpenHistory(true);

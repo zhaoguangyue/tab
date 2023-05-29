@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import { AutoComplete, Row, Col, Table, Dropdown } from 'antd';
 import { MenuOutlined, DeleteOutlined } from '@ant-design/icons';
-import { useUpdateEffect, useBoolean, useInterval } from 'ahooks';
+import { useUpdateEffect, useBoolean, useInterval, useLocalStorageState } from 'ahooks';
 import { getStock, searchStock, type StockData } from '../dao/stockApi';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
@@ -15,7 +15,6 @@ import { CSS } from '@dnd-kit/utilities';
 import dayjs from 'dayjs';
 
 const getColor = (val: number) => (val > 0 ? 'text-red' : val < 0 ? 'text-green' : '');
-let stockList: string[] = JSON.parse(localStorage.getItem('stockList') || '[]');
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   'data-row-key': string;
@@ -26,6 +25,9 @@ export const Stock = () => {
   const [suggest, setSuggest] = useState<StockData[]>([]);
   const [stockData, setStockData] = useState<any[][]>([]);
   const [edit, { toggle: toggleEdit }] = useBoolean(false);
+  const [stockList, setStockList] = useLocalStorageState<string[] | any>('stockList', {
+    defaultValue: [],
+  });
 
   const columns = useMemo(() => {
     let _columns: any = [
@@ -85,12 +87,14 @@ export const Stock = () => {
   const onSearch = useCallback((val: string) => {
     setValue(val);
   }, []);
-  const onSelect = useCallback((val: string) => {
-    setValue('');
-    stockList.push(val);
-    localStorage.setItem('stockList', JSON.stringify(stockList));
-    getStockData();
-  }, []);
+  const onSelect = useCallback(
+    (val: string) => {
+      setValue('');
+      setStockList([...stockList, val]);
+      getStockData();
+    },
+    [stockList]
+  );
 
   useUpdateEffect(() => {
     searchStock(value).then((res: StockData[]) => {
@@ -106,11 +110,13 @@ export const Stock = () => {
     }
   }, [stockList, stockData]);
 
-  const deleteStock = useCallback((code: string) => {
-    stockList = stockList.filter((item) => !item.includes(code));
-    localStorage.setItem('stockList', JSON.stringify(stockList));
-    getStockData();
-  }, []);
+  const deleteStock = useCallback(
+    (code: string) => {
+      setStockList(stockList.filter((item: string) => !item.includes(code)));
+      getStockData();
+    },
+    [stockList]
+  );
 
   useInterval(getStockData, 5000);
 
@@ -124,7 +130,7 @@ export const Stock = () => {
         const activeIndex = previous.findIndex((i: any) => i.code === active.id);
         const overIndex = previous.findIndex((i: any) => i.code === over?.id);
         const newSort = arrayMove(previous, activeIndex, overIndex);
-        localStorage.setItem('stockList', JSON.stringify(newSort.map((i: any) => i.fullCode)));
+        setStockList(newSort.map((i: any) => i.fullCode));
         return newSort;
       });
     }

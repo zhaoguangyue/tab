@@ -1,6 +1,3 @@
-import { resolve } from 'path';
-import $ from 'jquery';
-import { noop } from 'lodash-es';
 import browser from 'webextension-polyfill';
 
 /**
@@ -14,12 +11,12 @@ export async function sendChromeMessage(message: any) {
   return response;
 }
 
-export const jsonp = (url: string, success: any = noop, error: any = noop) => {
-  $.ajax({
-    url,
-    dataType: 'jsonp',
-    jsonpCallback: 'cb',
-    success,
-    error,
-  });
+export const isToday = () => {
+  const cacheToday = localStorage.getItem('today');
+  const now = new Date();
+  const today = `${now.getMonth()}-${now.getDate()}`;
+  if (cacheToday !== today) {
+    localStorage.setItem('today', today);
+  }
+  return cacheToday !== today;
 };

@@ -43,8 +43,15 @@ const ScreenRecord = () => {
             };
           })
           .catch((err) => {
+            console.log(`录屏err--`, {
+              code: err.code,
+              name: err.name,
+              message: err.message,
+            });
             if (err.name === 'NotAllowedError') {
-              alert('mac设备需要有浏览器录制权限,设置-安全与隐私-屏幕录制');
+              if (err.message === 'Permission denied by system') {
+                alert('mac设备需要有浏览器录制权限,设置-安全与隐私-屏幕录制');
+              }
             } else {
               alert(
                 `error: ${err.name} ${err.message} https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getDisplayMedia#%E5%BC%82%E5%B8%B8`

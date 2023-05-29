@@ -44,7 +44,6 @@ const EditRemind = (props: any) => {
   }, [data, visible]);
 
   const handleCancel = useCallback(() => {
-    console.log(11111111);
     form.resetFields();
     onCancel();
   }, [onCancel]);
@@ -115,7 +114,6 @@ const Remind = () => {
   }, []);
 
   const onEdit = useCallback((record: Item) => {
-    console.log('file: Remind.tsx:116 ~ onEdit ~ record:', record);
     setEditRemind(true);
     setEditData(record);
   }, []);

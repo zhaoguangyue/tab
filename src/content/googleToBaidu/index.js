@@ -30,7 +30,6 @@ if (host.includes('google.com')) {
 
 if (host.includes('baidu.com')) {
   var searchInput = $('input[name="wd"]').first();
-  console.log('file: index.js:32 ~ searchInput:', searchInput);
   var parent = searchInput.parent();
   parent.css({ position: 'relative' });
 

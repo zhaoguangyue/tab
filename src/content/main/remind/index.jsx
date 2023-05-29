@@ -7,13 +7,13 @@ const Remind = () => {
     chrome.runtime.onMessage.addListener((request) => {
       if (request.messageType !== 'remind') return;
       chrome.storage.sync.get(['remind']).then(({ remind: reminds = [] }) => {
-        const remind = reminds.find((item) => item.name === request.key);
+        const remind = reminds.find((item) => item.key === request.name);
         if (remind) {
           notification.open({
             icon: <BellOutlined />,
             message: remind.title,
             description: remind.description,
-            placement: 'bottomRight',
+            placement: 'topRight',
             duration: 0,
           });
         }

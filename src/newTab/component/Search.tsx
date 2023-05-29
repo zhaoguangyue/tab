@@ -1,11 +1,12 @@
 import { forwardRef, useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { AutoComplete, Input, Avatar } from 'antd';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isObject } from 'lodash-es';
 import { useControllableValue } from 'ahooks';
 import { Engine, SearchEngine } from '../../constant';
 import { githubRepo } from '../../constant';
 import { SearchFunc } from '../../background/search';
 import { sendChromeMessage } from '../utils';
+import { getUserRepositories } from '../dao/github';
 
 interface SearchProps {
   isContentScript?: boolean;
@@ -29,14 +30,16 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
   }, []);
 
   const handleSearch = useCallback(async () => {
-    if (isEmpty(search)) {
+    if (isEmpty(search) && engine !== Engine.Github) {
       return setSuggest([]);
     }
 
     switch (engine) {
       case Engine.Github:
-        const gitSuggest = githubRepo.filter((item) => item.includes(search));
-        setSuggest(gitSuggest);
+        getUserRepositories().then((repoList) => {
+          const gitSuggest = repoList.filter((item: any) => item.label.includes(search));
+          setSuggest(gitSuggest);
+        });
         break;
       case Engine.Google:
       case Engine.Baidu:
@@ -63,7 +66,9 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
 
   const onSearch = useCallback(
     (searchVal: string) => {
-      setSearch(searchVal);
+      if (isContentScript) {
+        return;
+      }
       switch (engine) {
         case Engine.Google:
           window.location.href = `https://www.google.com/search?q=${searchVal}&sourceid=chrome&ie=UTF-8`;
@@ -72,7 +77,7 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
           window.location.href = `https://www.baidu.com/s?wd=${searchVal}`;
           break;
         case Engine.Github:
-          window.location.href = `https://github.com/BangWork/${searchVal}`;
+          window.location.href = searchVal;
           break;
       }
     },
@@ -94,7 +99,7 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
           break;
       }
     },
-    [onSearch, changeSearchEngine]
+    [search, onSearch, changeSearchEngine]
   );
 
   return (
@@ -106,7 +111,7 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
         defaultOpen
         autoFocus
         onSelect={onSearch}
-        options={suggest.map((item) => ({ value: item, label: item }))}
+        options={suggest.map((item) => (isObject(item) ? item : { value: item, label: item }))}
       >
         <Input
           className="w-[600px] h-[44px] focus:shadow-sm"

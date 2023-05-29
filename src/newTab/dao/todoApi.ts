@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useDebounceFn } from 'ahooks';
 import { todoApi } from '../../background/notion';
-import dayjs from 'dayjs';
+import { isToday } from '../utils';
 
 interface ItemProps {
   id: string;
@@ -53,13 +53,7 @@ export const useTodo = () => {
             date: item.properties.Date?.date?.start,
           };
         }) || [];
-      localStorage.setItem(
-        'todo',
-        JSON.stringify({
-          lastUpdateTime: dayjs().format('YYYY-MM-DD'),
-          data: formatResult,
-        })
-      );
+      localStorage.setItem('todo', JSON.stringify(formatResult));
       setDataList(formatResult);
       setLoading(false);
     });
@@ -99,9 +93,10 @@ export const useTodo = () => {
   );
 
   useEffect(() => {
-    const cacheTodo = JSON.parse(localStorage.getItem('todo') || '');
-    if (cacheTodo && cacheTodo.lastUpdateTime === dayjs().format('YYYY-MM-DD')) {
-      setDataList(cacheTodo.data);
+    const cacheTodo = JSON.parse(localStorage.getItem('todo') || '[]');
+    if (cacheTodo && isToday()) {
+      setDataList(cacheTodo);
+      setLoading(false);
       return;
     } else {
       notionGet();
