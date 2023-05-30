@@ -4,13 +4,16 @@ import { useKeyPress, useBoolean } from 'ahooks';
 import { Search } from '../../../newTab/component/Search';
 
 const ContentSearch = () => {
-  const [visible, { toggle, setTrue: setOpen, setFalse: setHidden }] = useBoolean(false);
-  const [value, setValue] = useState('');
+  const [visible, { toggle, setFalse: setHidden }] = useBoolean(false);
+  const [search, setSearch] = useState('');
+  const [open, setOpen] = useState(false);
+
   const ref = useRef(null);
 
   useKeyPress(['meta.s'], (event) => {
     toggle();
-    setValue('');
+    setOpen(true);
+    setSearch('');
     event.preventDefault();
   });
 
@@ -34,7 +37,14 @@ const ContentSearch = () => {
       wrapClassName="global-search-modal"
       style={{ top: '25%' }}
     >
-      <Search isContentScript ref={ref} value={value} onChange={setValue} />
+      <Search
+        isContentScript
+        ref={ref}
+        search={search}
+        open={open}
+        onChangeOpen={setOpen}
+        onChange={setSearch}
+      />
     </Modal>
   );
 };

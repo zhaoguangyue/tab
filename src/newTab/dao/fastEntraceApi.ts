@@ -1,33 +1,18 @@
 import { useState, useCallback, useEffect } from 'react';
-import { fastEntranceApi } from './notion';
+import { NotionApi } from './notion';
 import { isToday } from '../utils';
 
-interface ItemProps {
-  id: string;
-  properties: {
-    Name: {
-      title: Array<{
-        text: {
-          content: string;
-        };
-      }>;
-    };
-    Url: {
-      url: string;
-    };
-    Icon: {
-      rich_text: Array<{ text: { content: string } }>;
-    };
-    [key: string]: any;
-  };
-  [key: string]: any;
-}
+const fastEntranceApi = new NotionApi('a3eea759937f484483837912f6662835', [
+  { key: 'Name', type: 'title', defaultValue: '' },
+  { key: 'Url', type: 'url', defaultValue: '' },
+  { key: 'Icon', type: 'rich_text', defaultValue: '' },
+]);
 
 export interface DateItemProps {
   id: string;
-  name: string;
-  url: string;
-  icon: string | undefined;
+  Name: string;
+  Url: string;
+  Icon: string | undefined;
 }
 
 export const useFastEntrance = () => {
@@ -38,12 +23,12 @@ export const useFastEntrance = () => {
     setLoading(true);
     fastEntranceApi.query().then((data: any) => {
       const formatResult =
-        data?.results?.map((item: ItemProps) => {
+        data?.results?.map((item: any) => {
           return {
             id: item.id,
-            name: item.properties.Name.title[0]?.text?.content || '',
-            url: item?.properties.Url.url,
-            icon: item.properties.Icon.rich_text?.[0]?.text?.content || '',
+            Name: item.properties.Name.title[0]?.text?.content || '',
+            Url: item?.properties.Url.url,
+            Icon: item.properties.Icon.rich_text?.[0]?.text?.content || '',
           };
         }) || [];
       localStorage.setItem('fastEntrance', JSON.stringify(formatResult));
@@ -60,24 +45,27 @@ export const useFastEntrance = () => {
     fastEntranceApi.delete({ pageId }).then(() => notionGet());
   }, []);
 
-  const notionUpdate = useCallback(async (params: any) => {
-    fastEntranceApi.update(params).then(() => {
-      const newDataList = dataList.map((item: DateItemProps) => {
-        if (item.id === params.pageId) {
-          return {
-            ...item,
-            ...params,
-          };
-        }
-        return item;
+  const notionUpdate = useCallback(
+    async (params: any) => {
+      fastEntranceApi.update(params).then(() => {
+        const newDataList = dataList.map((item: DateItemProps) => {
+          if (item.id === params.id) {
+            return {
+              ...item,
+              ...params,
+            };
+          }
+          return item;
+        });
+        setDataList(newDataList);
       });
-      setDataList(newDataList);
-    });
-  }, []);
+    },
+    [dataList]
+  );
 
   useEffect(() => {
     const cacheFastEntrance = JSON.parse(localStorage.getItem('fastEntrance') || '[]');
-    if (cacheFastEntrance && isToday()) {
+    if (cacheFastEntrance.length && isToday()) {
       setDataList(cacheFastEntrance);
       return;
     } else {

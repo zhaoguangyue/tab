@@ -1,34 +1,14 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useDebounceFn } from 'ahooks';
-import { todoApi } from '../../background/notion';
+import { NotionApi } from './notion';
 import { isToday } from '../utils';
+import dayjs from 'dayjs';
 
-interface ItemProps {
-  id: string;
-  properties: {
-    Name: {
-      title: Array<{
-        text: {
-          content: string;
-        };
-      }>;
-    };
-    Todo: {
-      rich_text: Array<{
-        text: {
-          content: string;
-        };
-      }>;
-    };
-    Date: {
-      date: {
-        start: string;
-      } | null;
-    };
-    [key: string]: any;
-  };
-  [key: string]: any;
-}
+const todoApi = new NotionApi('40035b2b387b4e8e896d0b10a2fdeca7', [
+  { key: 'Name', type: 'title', defaultValue: '' },
+  { key: 'Date', type: 'date', defaultValue: dayjs().format('YYYY-MM-DD') },
+  { key: 'Todo', type: 'rich_text', defaultValue: dayjs().format('YYYY-MM-DD') },
+]);
 
 export interface DateItemProps {
   id: string;
@@ -60,7 +40,7 @@ export const useTodo = () => {
   }, []);
 
   const notionCreate = useCallback(async () => {
-    todoApi.create({ content: '' }).then(() => notionGet());
+    todoApi.create({ Todo: '' }).then(() => notionGet());
   }, []);
 
   const notionDelete = useCallback(async (pageId: string) => {
@@ -68,33 +48,32 @@ export const useTodo = () => {
   }, []);
 
   const { run } = useDebounceFn(
-    async (pageId: string, title: string, content: string) => {
-      todoApi.update({ pageId, content });
+    async (pageId: string, Todo: string) => {
+      todoApi.update({ pageId, Todo });
     },
     { wait: 1500 }
   );
 
   const notionUpdate = useCallback(
-    (pageId: string, title: string, content: string) => {
+    (pageId: string, content: string) => {
       const newDataList = dataList.map((item: DateItemProps) => {
         if (item.id === pageId) {
           return {
             ...item,
-            title,
             content,
           };
         }
         return item;
       });
       setDataList(newDataList);
-      run(pageId, title, content);
+      run(pageId, content);
     },
     [dataList]
   );
 
   useEffect(() => {
     const cacheTodo = JSON.parse(localStorage.getItem('todo') || '[]');
-    if (cacheTodo && isToday()) {
+    if (cacheTodo.length && isToday()) {
       setDataList(cacheTodo);
       setLoading(false);
       return;

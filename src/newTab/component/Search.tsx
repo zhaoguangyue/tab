@@ -3,7 +3,6 @@ import { AutoComplete, Input, Avatar } from 'antd';
 import { isEmpty, isObject } from 'lodash-es';
 import { useControllableValue, useDebounceFn } from 'ahooks';
 import { Engine, SearchEngine } from '../../constant';
-import { githubRepo } from '../../constant';
 import { SearchFunc } from '../../background/search';
 import { sendChromeMessage } from '../utils';
 import { getUserRepositories } from '../dao/github';
@@ -15,9 +14,18 @@ interface SearchProps {
 }
 export const Search = forwardRef((props: SearchProps, ref: any) => {
   const { isContentScript } = props;
+  const [open, setOpen] = useControllableValue(props, {
+    defaultValue: false,
+    valuePropName: 'open',
+    trigger: 'onChangeOpen',
+  });
   const [index, setIndex] = useState(0);
-  const [search, setSearch] = useControllableValue(props, { defaultValue: '' });
+  const [search, setSearch] = useControllableValue(props, {
+    defaultValue: '',
+    valuePropName: 'search',
+  });
   const [suggest, setSuggest] = useState<string[]>([]);
+  console.log('file: Search.tsx:21 ~ Search ~ suggest:', suggest);
   const { engine, icon } = useMemo(() => SearchEngine[index], [index]);
 
   const changeSearchEngine = useCallback(() => {
@@ -115,10 +123,14 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
         defaultOpen
         autoFocus
         onSelect={onSearch}
+        getPopupContainer={(node) => node}
         options={suggest.map((item) => (isObject(item) ? item : { value: item, label: item }))}
+        open={open}
+        onDropdownVisibleChange={(visible) => setOpen(visible)}
+        popupClassName="!w-full"
       >
         <Input
-          className="w-[600px] h-[44px] focus:shadow-sm"
+          className=" h-[44px] focus:shadow-sm"
           size="large"
           autoFocus
           ref={ref}

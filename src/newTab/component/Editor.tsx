@@ -11,7 +11,7 @@ import { useUpdateEffect, useKeyPress } from 'ahooks';
 
 interface EditorProps {
   data: any;
-  update: (pageId: string, title: string, content: string) => void;
+  update: (pageId: string, content: string) => void;
 }
 export const MilkdownEditor = (props: EditorProps) => {
   const { data, update } = props;
@@ -19,7 +19,7 @@ export const MilkdownEditor = (props: EditorProps) => {
   const [content, setContent] = useState(data?.content);
 
   useUpdateEffect(() => {
-    update(data.id, data.title, content);
+    update(data.id, content);
   }, [content]);
 
   editorRef.current = useEditor((root) => {
@@ -45,7 +45,7 @@ export const MilkdownEditor = (props: EditorProps) => {
   useKeyPress(
     ['meta.s', 'ctrl.s'],
     (e) => {
-      update(data.id, data.title, content);
+      update(data.id, content);
       e.preventDefault();
     },
     {

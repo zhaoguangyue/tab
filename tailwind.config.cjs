@@ -45,5 +45,5 @@ module.exports = {
     preflight: false,
   },
   plugins: [require('@tailwindcss/typography')],
+  important: true,
 };
-118, 170, 98;

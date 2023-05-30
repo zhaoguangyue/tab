@@ -1,13 +1,10 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Dropdown, Modal, Tabs, Tree, Form, Input, Avatar, Typography, type TabsProps } from 'antd';
-import { useBoolean, useClickAway } from 'ahooks';
-import { bookmarks as mockData } from '../mockdata';
+import { useBoolean } from 'ahooks';
 import { pluginId } from '../utils';
-import { mock } from 'node:test';
-import { FolderOutlined, CloseCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { FolderOutlined, PlusOutlined } from '@ant-design/icons';
 import { useFastEntrance } from '../dao/fastEntraceApi';
-import { fastEntranceApi } from '../../background/notion';
-import { isEmpty, find } from 'lodash-es';
+import { isEmpty, set } from 'lodash-es';
 
 const layout = {
   labelCol: { span: 2 },
@@ -38,7 +35,7 @@ const FastEntrance = () => {
     } else {
       // @ts-ignore
       const url = new URL(chrome.runtime.getURL('/_favicon/'));
-      url.searchParams.set('pageUrl', props.url);
+      url.searchParams.set('pageUrl', props.Url);
       url.searchParams.set('size', '64');
       icon = <img className="w-3 h-3" src={url.toString()} />;
     }
@@ -48,9 +45,9 @@ const FastEntrance = () => {
   const treeNodeSelect = (keys: any, node: any) => {
     if (!node.node.children) {
       setNewBookmarkEntrance({
-        url: node.node.url,
-        icon: `chrome-extension://${pluginId}/_favicon/?pageUrl=${node.node.url || ''}&size=64`,
-        name: node.node.title,
+        Url: node.node.url,
+        Icon: `chrome-extension://${pluginId}/_favicon/?pageUrl=${node.node.url || ''}&size=64`,
+        Name: node.node.title,
       });
     }
   };
@@ -68,7 +65,7 @@ const FastEntrance = () => {
   const onFinish = useCallback(async () => {
     const doFinish = new Promise((resolve) => {
       if (tab === 'custom') {
-        form.validateFields().then((values) => {
+        form.validateFields().then(() => {
           resolve(newEntrance);
         });
       } else if (!isEmpty(newBookmarkEntrance)) {
@@ -94,6 +91,7 @@ const FastEntrance = () => {
   const onEditEntrance = useCallback((entrance: any) => {
     setNewEntrance(entrance);
     form.setFieldsValue(entrance);
+    setTab('custom');
     toggleOpen();
   }, []);
 
@@ -111,13 +109,13 @@ const FastEntrance = () => {
           onValuesChange={onValuesChange}
           labelCol={{ span: 24 }}
         >
-          <Form.Item name="name" label="名称" rules={[{ required: true }]}>
+          <Form.Item name="Name" label="名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="url" label="链接地址" rules={[{ required: true }]}>
+          <Form.Item name="Url" label="链接地址" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="icon" label="图标地址">
+          <Form.Item name="Icon" label="图标地址">
             <Input placeholder="请输入地址或文字" />
           </Form.Item>
         </Form>
@@ -165,14 +163,14 @@ const FastEntrance = () => {
               <a
                 key={item.id}
                 className="m-3 text-center no-underline relative p-2 block w-[120px] h-[100px] rounded-lg "
-                href={item.url}
+                href={item.Url}
               >
-                <Avatar src={item.icon || ''} alt={item.name.slice(0, 4)} shape="square" size={60}>
-                  {item.icon.slice(0, 4)}
+                <Avatar src={item.Icon || ''} alt={item.Name.slice(0, 4)} shape="square" size={60}>
+                  {item.Icon.slice(0, 4)}
                 </Avatar>
                 <div className="overflow-hidden mt-1">
                   <Typography.Text ellipsis className="h-4 block align-top">
-                    {item.name}
+                    {item.Name}
                   </Typography.Text>
                 </div>
               </a>

@@ -1,5 +1,7 @@
 import { defineManifest } from '@crxjs/vite-plugin';
 import packageJson from './package.json';
+
+const isDev = process.env.NODE_ENV !== 'production';
 const { version } = packageJson;
 
 // Convert from Semver (example: 0.1.0-beta6)
@@ -83,7 +85,10 @@ export default defineManifest(async (env) => ({
     matches: ['http://127.0.0.1:5173/', 'http://localhost:5173/'],
   },
   content_security_policy: {
-    extension_pages: "script-src 'self'; object-src 'self';",
+    extension_pages:
+      env.mode === 'development'
+        ? `script-src 'self' http://localhost:5173; object-src 'self' http://localhost:5173`
+        : "script-src 'self'; object-src 'self';",
   },
   content_scripts: [
     env.mode === 'development' ? devContentScriptsInject : null,

@@ -1,19 +1,28 @@
 import dayjs from 'dayjs';
 import { isToday } from '../utils';
+import { NotionApi } from './notion';
+import Browser from 'webextension-polyfill';
 
-// 通过 Personal Access Token 进行身份验证
-// 设置请求头部信息
-const headers = {
-  Authorization: `Bearer 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`,
-  Accept: 'application/vnd.github.v3+json',
+const githubApi = new NotionApi('e553f53876b84946b9c4cff579291740', []);
+
+const getGithubToken = () => {
+  return githubApi.query().then((data: any) => {
+    const token = data?.results?.[0]?.properties?.token?.rich_text?.[0]?.text?.content || '';
+    Browser.storage.sync.set({ githubToken: token });
+    return token;
+  });
 };
 
 // 获取用户所有仓库信息
 export const getUserRepositories = async () => {
   try {
+    let { githubToken } = await Browser.storage.sync.get('githubToken');
+    if (!githubToken) {
+      githubToken = await getGithubToken();
+    }
     const cacheRepo = JSON.parse(localStorage.getItem('repo') || '[]');
     let repositories = [];
-    if (cacheRepo && isToday()) {
+    if (cacheRepo.length && isToday()) {
       repositories = cacheRepo;
     } else {
       const lastYear = dayjs().subtract(1, 'year').format('YYYY-MM-DD');
@@ -21,11 +30,14 @@ export const getUserRepositories = async () => {
         `https://api.github.com/user/repos?per_page=100&sort=pushed&since=${lastYear}`,
         {
           method: 'GET',
-          headers,
+          headers: {
+            Authorization: `Bearer ${githubToken}`, // 通过 Personal Access Token 进行身份验证
+            Accept: 'application/vnd.github.v3+json',
+          },
         }
       );
       repositories = await response.json();
-      localStorage.setItem('repo', JSON.stringify(repositories));
+      localStorage.setItem('repo', JSON.stringify(Array.isArray(repositories) ? repositories : []));
     }
 
     // 处理仓库信息
