@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { NotionApi } from './notion';
 import { isToday } from '../utils';
+import dayjs from 'dayjs';
 
 const fastEntranceApi = new NotionApi('a3eea759937f484483837912f6662835', [
   { key: 'Name', type: 'title', defaultValue: '' },
@@ -31,7 +32,13 @@ export const useFastEntrance = () => {
             Icon: item.properties.Icon.rich_text?.[0]?.text?.content || '',
           };
         }) || [];
-      localStorage.setItem('fastEntrance', JSON.stringify(formatResult));
+      localStorage.setItem(
+        'fastEntrance',
+        JSON.stringify({
+          lastUpdate: dayjs().format('YYYY-MM-DD'),
+          data: formatResult,
+        })
+      );
       setDataList(formatResult);
       setLoading(false);
     });
@@ -64,9 +71,9 @@ export const useFastEntrance = () => {
   );
 
   useEffect(() => {
-    const cacheFastEntrance = JSON.parse(localStorage.getItem('fastEntrance') || '[]');
-    if (cacheFastEntrance.length && isToday()) {
-      setDataList(cacheFastEntrance);
+    const cacheFastEntrance = JSON.parse(localStorage.getItem('fastEntrance') || '{}');
+    if (cacheFastEntrance.data?.length && isToday(cacheFastEntrance.lastUpdate)) {
+      setDataList(cacheFastEntrance.data);
       return;
     } else {
       notionGet();

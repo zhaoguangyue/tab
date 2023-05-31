@@ -5,9 +5,9 @@ import { isToday } from '../utils';
 import dayjs from 'dayjs';
 
 const todoApi = new NotionApi('40035b2b387b4e8e896d0b10a2fdeca7', [
-  { key: 'Name', type: 'title', defaultValue: '' },
+  { key: 'Name', type: 'title', defaultValue: dayjs().format('YYYY-MM-DD') },
   { key: 'Date', type: 'date', defaultValue: dayjs().format('YYYY-MM-DD') },
-  { key: 'Todo', type: 'rich_text', defaultValue: dayjs().format('YYYY-MM-DD') },
+  { key: 'Todo', type: 'rich_text', defaultValue: '' },
 ]);
 
 export interface DateItemProps {
@@ -33,7 +33,13 @@ export const useTodo = () => {
             date: item.properties.Date?.date?.start,
           };
         }) || [];
-      localStorage.setItem('todo', JSON.stringify(formatResult));
+      localStorage.setItem(
+        'todo',
+        JSON.stringify({
+          lastUpdate: dayjs().format('YYYY-MM-DD'),
+          data: formatResult,
+        })
+      );
       setDataList(formatResult);
       setLoading(false);
     });
@@ -72,9 +78,9 @@ export const useTodo = () => {
   );
 
   useEffect(() => {
-    const cacheTodo = JSON.parse(localStorage.getItem('todo') || '[]');
-    if (cacheTodo.length && isToday()) {
-      setDataList(cacheTodo);
+    const cacheTodo = JSON.parse(localStorage.getItem('todo') || '{}');
+    if (cacheTodo.data?.length && isToday(cacheTodo.lastUpdate)) {
+      setDataList(cacheTodo.data);
       setLoading(false);
       return;
     } else {

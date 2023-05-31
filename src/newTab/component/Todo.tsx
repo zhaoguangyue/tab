@@ -12,9 +12,9 @@ const Todo = () => {
   const [last, setLast] = useState<DateItemProps>();
   useEffect(() => {
     if (!loading) {
-      const last = dataList[0] || {};
+      const last: any = dataList[0] || {};
       setLast(last);
-      if (!isToday()) {
+      if (last?.date && !isToday(last?.date)) {
         notionCreate();
       }
     }

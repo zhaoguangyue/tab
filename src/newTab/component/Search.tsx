@@ -1,7 +1,7 @@
 import { forwardRef, useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { AutoComplete, Input, Avatar } from 'antd';
 import { isEmpty, isObject } from 'lodash-es';
-import { useControllableValue, useDebounceFn } from 'ahooks';
+import { useControllableValue, useDebounceFn, useUpdateEffect } from 'ahooks';
 import { Engine, SearchEngine } from '../../constant';
 import { SearchFunc } from '../../background/search';
 import { sendChromeMessage } from '../utils';
@@ -25,9 +25,7 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
     valuePropName: 'search',
   });
   const [suggest, setSuggest] = useState<string[]>([]);
-  console.log('file: Search.tsx:21 ~ Search ~ suggest:', suggest);
   const { engine, icon } = useMemo(() => SearchEngine[index], [index]);
-
   const changeSearchEngine = useCallback(() => {
     const nextIndex = index >= SearchEngine.length - 1 ? 0 : index + 1;
     setIndex(nextIndex);
@@ -68,7 +66,7 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
     }
   }, [search, engine]);
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     handleSearch();
   }, [search, engine]);
 

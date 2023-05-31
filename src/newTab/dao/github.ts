@@ -20,10 +20,10 @@ export const getUserRepositories = async () => {
     if (!githubToken) {
       githubToken = await getGithubToken();
     }
-    const cacheRepo = JSON.parse(localStorage.getItem('repo') || '[]');
+    const cacheRepo = JSON.parse(localStorage.getItem('repo') || '{}');
     let repositories = [];
-    if (cacheRepo.length && isToday()) {
-      repositories = cacheRepo;
+    if (cacheRepo.data?.length && isToday(cacheRepo.lastUpdate)) {
+      repositories = cacheRepo.data;
     } else {
       const lastYear = dayjs().subtract(1, 'year').format('YYYY-MM-DD');
       const response = await fetch(
@@ -37,7 +37,13 @@ export const getUserRepositories = async () => {
         }
       );
       repositories = await response.json();
-      localStorage.setItem('repo', JSON.stringify(Array.isArray(repositories) ? repositories : []));
+      localStorage.setItem(
+        'repo',
+        JSON.stringify({
+          lastUpdate: dayjs().format('YYYY-MM-DD'),
+          data: Array.isArray(repositories) ? repositories : [],
+        })
+      );
     }
 
     // 处理仓库信息

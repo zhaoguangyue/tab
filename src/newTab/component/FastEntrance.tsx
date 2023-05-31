@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Dropdown, Modal, Tabs, Tree, Form, Input, Avatar, Typography, type TabsProps } from 'antd';
 import { useBoolean } from 'ahooks';
 import { pluginId } from '../utils';
@@ -11,6 +11,20 @@ const layout = {
   wrapperCol: { span: 22 },
 };
 
+const Icon = (props: any) => {
+  let icon = null;
+  if (props.data.children) {
+    icon = <FolderOutlined />;
+  } else {
+    // @ts-ignore
+    const url = new URL(chrome.runtime.getURL('/_favicon/'));
+    url.searchParams.set('pageUrl', props.url);
+    url.searchParams.set('size', '64');
+    icon = <img className="w-3 h-3" src={url.toString()} />;
+  }
+  return <div className="inline-flex items-center align-[-3px]">{icon}</div>;
+};
+
 const FastEntrance = () => {
   const { dataList, notionCreate, notionDelete, notionUpdate } = useFastEntrance();
   const [open, { toggle: toggleOpen }] = useBoolean(false);
@@ -18,6 +32,7 @@ const FastEntrance = () => {
   const [newEntrance, setNewEntrance] = useState<any>({});
   const [newBookmarkEntrance, setNewBookmarkEntrance] = useState<any>({});
   const [form] = Form.useForm();
+  // const isEdit = useMemo(() => !!newEntrance.id, []);
 
   let [bookmarks, setBookmarks] = useState<any[]>([]);
 
@@ -28,23 +43,10 @@ const FastEntrance = () => {
     });
   }, []);
 
-  const Icon = (props: any) => {
-    let icon = null;
-    if (props.data.children) {
-      icon = <FolderOutlined />;
-    } else {
-      // @ts-ignore
-      const url = new URL(chrome.runtime.getURL('/_favicon/'));
-      url.searchParams.set('pageUrl', props.Url);
-      url.searchParams.set('size', '64');
-      icon = <img className="w-3 h-3" src={url.toString()} />;
-    }
-    return <div className="inline-flex items-center align-[-3px]">{icon}</div>;
-  };
-
   const treeNodeSelect = (keys: any, node: any) => {
     if (!node.node.children) {
       setNewBookmarkEntrance({
+        id: newEntrance.id,
         Url: node.node.url,
         Icon: `chrome-extension://${pluginId}/_favicon/?pageUrl=${node.node.url || ''}&size=64`,
         Name: node.node.title,
@@ -95,6 +97,13 @@ const FastEntrance = () => {
     toggleOpen();
   }, []);
 
+  const onCancel = useCallback(() => {
+    toggleOpen();
+    setTab('custom');
+    form.resetFields();
+    console.log(newEntrance);
+  }, [form]);
+
   const items: TabsProps['items'] = [
     {
       key: 'custom',
@@ -144,7 +153,7 @@ const FastEntrance = () => {
   return (
     <div>
       <div className="w-[500px] bg-white">
-        <div className="flex">
+        <div className="p-2">
           {dataList.map((item: any) => (
             <Dropdown
               key={item.id}
@@ -162,7 +171,7 @@ const FastEntrance = () => {
             >
               <a
                 key={item.id}
-                className="m-3 text-center no-underline relative p-2 block w-[120px] h-[100px] rounded-lg "
+                className="text-center no-underline relative inline-block w-[120px] h-[105px] rounded-lg p-2"
                 href={item.Url}
               >
                 <Avatar src={item.Icon || ''} alt={item.Name.slice(0, 4)} shape="square" size={60}>
@@ -176,12 +185,12 @@ const FastEntrance = () => {
               </a>
             </Dropdown>
           ))}
-          <div className="m-3 w-[120px] h-[100px] rounded-lg flex justify-center items-center">
+          <a className="w-[120px] h-[80px] p-2 rounded-lg inline-flex justify-center items-center align-top">
             <PlusOutlined className="text-6xl text-gray-500" onClick={toggleOpen} />
-          </div>
+          </a>
         </div>
       </div>
-      <Modal open={open} onCancel={toggleOpen} centered onOk={onFinish} zIndex={10000}>
+      <Modal open={open} onCancel={onCancel} centered onOk={onFinish} zIndex={10000}>
         <div className="h-[450px] overflow-auto">
           <Tabs defaultActiveKey="custom" items={items} activeKey={tab} onTabClick={setTab}></Tabs>
         </div>

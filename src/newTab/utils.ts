@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-
+import dayjs from 'dayjs';
 /**
  * 向Chrome发送消息
  * @param message 消息
@@ -11,12 +11,11 @@ export async function sendChromeMessage(message: any) {
   return response;
 }
 
-export const isToday = () => {
-  const cacheToday = localStorage.getItem('today');
-  const now = new Date();
-  const today = `${now.getMonth()}-${now.getDate()}`;
-  if (cacheToday !== today) {
-    localStorage.setItem('today', today);
+let cacheNow = '';
+export const isToday = (date: string) => {
+  if (!cacheNow) {
+    const now = dayjs().format('YYYY-MM-DD');
+    cacheNow = now;
   }
-  return cacheToday === today;
+  return cacheNow === date;
 };

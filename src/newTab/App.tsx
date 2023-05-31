@@ -6,11 +6,9 @@ import Todo from './component/Todo';
 import FastEntrance from './component/FastEntrance';
 import Remind from './component/Remind';
 import DateShow from './component/DateShow';
-import { getUserRepositories } from './dao/github';
 
 function App() {
   useFavicon(favicon);
-  getUserRepositories();
 
   return (
     <div className="App">
