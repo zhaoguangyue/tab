@@ -2,14 +2,17 @@ import $ from 'jquery';
 const host = window.location.host;
 var styles = {
   position: 'absolute',
-  padding: '4px 10px',
+  padding: '5px 15px',
   right: '0px',
-  top: '-2px',
+  top: '-5px',
   background: 'white',
   border: '1px solid #ccc',
   borderRadius: '5px',
   cursor: 'pointer',
-  fontSize: '12px',
+  fontSize: '14px',
+  color: '#fff',
+  background: '#2d86f0',
+  border: '1px solid #2d86f0',
 };
 
 if (host.includes('google.com')) {
@@ -42,9 +45,11 @@ if (host.includes('baidu.com')) {
 
   btn.css(styles);
   btn.css({
-    marginTop: '-13px',
+    marginTop: '-16px',
     top: '50%',
     right: '85px',
+    background: '#4e6ef2',
+    border: '1px solid #4e6ef2',
   });
 
   parent.append(btn);

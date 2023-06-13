@@ -25,17 +25,13 @@ export const getUserRepositories = async () => {
     if (cacheRepo.data?.length && isToday(cacheRepo.lastUpdate)) {
       repositories = cacheRepo.data;
     } else {
-      const lastYear = dayjs().subtract(1, 'year').format('YYYY-MM-DD');
-      const response = await fetch(
-        `https://api.github.com/user/repos?per_page=100&sort=pushed&since=${lastYear}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${githubToken}`, // 通过 Personal Access Token 进行身份验证
-            Accept: 'application/vnd.github.v3+json',
-          },
-        }
-      );
+      const response = await fetch(`https://api.github.com/user/repos?per_page=100&sort=pushed`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${githubToken}`, // 通过 Personal Access Token 进行身份验证
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
       repositories = await response.json();
       localStorage.setItem(
         'repo',

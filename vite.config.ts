@@ -9,7 +9,12 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), crx({ manifest })],
+  plugins: [
+    react(),
+    crx({
+      manifest,
+    }),
+  ],
   build: {
     assetsDir: 'static',
     rollupOptions: {

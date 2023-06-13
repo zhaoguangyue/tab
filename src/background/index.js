@@ -2,9 +2,21 @@ import dayjs from 'dayjs';
 import browser from 'webextension-polyfill';
 import { SearchFunc } from './search';
 
-async function sendMessageToActiveTab(message) {
-  const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-  chrome.tabs.sendMessage(tab?.id, { messageType: 'remind', ...message });
+async function sendMessageToActiveTab(alarm) {
+  console.log('file: index.js:6 ~ sendMessageToActiveTab ~ alarm:', alarm);
+  const iconUrl = browser.runtime.getURL('assets/alarm.png');
+  browser.storage.sync.get(['remind']).then(({ remind: reminds = [] }) => {
+    const remind = reminds.find((item) => item.key === alarm.name);
+    if (remind) {
+      browser.notifications.create(alarm.name, {
+        type: 'basic',
+        iconUrl,
+        title: remind.title,
+        message: remind.description,
+        requireInteraction: true,
+      });
+    }
+  });
 }
 
 const createAlarms = (reminds) => {
@@ -13,12 +25,12 @@ const createAlarms = (reminds) => {
       const YMD = dayjs().format('YYYY-MM-DD');
       const HMS = dayjs(item.time).format('HH:mm:ss');
       const when = dayjs(`${YMD} ${HMS}`).valueOf();
-      chrome.alarms.create(item.key, {
+      browser.alarms.create(item.key, {
         when,
         periodInMinutes: item.interval * 60,
       });
     } else {
-      chrome.alarms.create(item.key, {
+      browser.alarms.create(item.key, {
         when: item.time,
       });
     }
@@ -27,13 +39,13 @@ const createAlarms = (reminds) => {
 
 // 初始化提醒
 const initAlarms = () => {
-  chrome.alarms.clearAll();
-  chrome.storage.sync.get(['remind']).then((res) => {
+  browser.alarms.clearAll();
+  browser.storage.sync.get(['remind']).then((res) => {
     createAlarms(res?.remind || []);
   });
 };
 initAlarms();
-chrome.alarms.onAlarm.addListener(sendMessageToActiveTab);
+browser.alarms.onAlarm.addListener(sendMessageToActiveTab);
 
 // @ts-ignore
 browser.runtime.onMessage.addListener(async (request) => {

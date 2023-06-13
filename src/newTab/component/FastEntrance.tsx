@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import Browser from 'webextension-polyfill';
+import { useState, useEffect, useCallback } from 'react';
 import { Dropdown, Modal, Tabs, Tree, Form, Input, Avatar, Typography, type TabsProps } from 'antd';
 import { useBoolean } from 'ahooks';
 import { pluginId } from '../utils';
@@ -16,8 +17,7 @@ const Icon = (props: any) => {
   if (props.data.children) {
     icon = <FolderOutlined />;
   } else {
-    // @ts-ignore
-    const url = new URL(chrome.runtime.getURL('/_favicon/'));
+    const url = new URL(Browser.runtime.getURL('/_favicon/'));
     url.searchParams.set('pageUrl', props.url);
     url.searchParams.set('size', '64');
     icon = <img className="w-3 h-3" src={url.toString()} />;

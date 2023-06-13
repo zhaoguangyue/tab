@@ -5,6 +5,7 @@ import { BellOutlined } from '@ant-design/icons';
 const Remind = () => {
   useEffect(() => {
     chrome.runtime.onMessage.addListener((request) => {
+      console.log('---', request);
       if (request.messageType !== 'remind') return;
       chrome.storage.sync.get(['remind']).then(({ remind: reminds = [] }) => {
         const remind = reminds.find((item) => item.key === request.name);
@@ -25,3 +26,11 @@ const Remind = () => {
 };
 
 export default Remind;
+
+-'DOMAIN-SUFFIX,openai.com,DIRECT' -
+  'DOMAIN-SUFFIX,google.com,DIRECT' -
+  'DOMAIN,developer.chrome.com,三毛机场' -
+  'DOMAIN-SUFFIX,cn,DIRECT' -
+  'DOMAIN-KEYWORD,-cn,DIRECT' -
+  'GEOIP,CN,DIRECT' -
+  'MATCH,DIRECT';

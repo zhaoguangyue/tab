@@ -1,5 +1,5 @@
 import { useFavicon } from 'ahooks';
-import favicon from '../assets/favicon.svg';
+import favicon from '/assets/favicon.svg';
 import { Search } from './component/Search';
 import { Stock } from './component/Stock';
 import Todo from './component/Todo';

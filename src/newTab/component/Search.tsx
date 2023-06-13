@@ -1,7 +1,7 @@
-import { forwardRef, useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import { forwardRef, useState, useCallback, useEffect, useMemo } from 'react';
 import { AutoComplete, Input, Avatar } from 'antd';
 import { isEmpty, isObject } from 'lodash-es';
-import { useControllableValue, useDebounceFn, useUpdateEffect } from 'ahooks';
+import { useControllableValue, useDebounceFn } from 'ahooks';
 import { Engine, SearchEngine } from '../../constant';
 import { SearchFunc } from '../../background/search';
 import { sendChromeMessage } from '../utils';
@@ -66,7 +66,7 @@ export const Search = forwardRef((props: SearchProps, ref: any) => {
     }
   }, [search, engine]);
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     handleSearch();
   }, [search, engine]);
 

@@ -9,14 +9,18 @@ const github = browser.runtime.getURL('assets/github.svg');
 // import github from '../assets/github.svg';
 
 export enum Engine {
+  Github = 'github',
   Baidu = 'baidu',
   Google = 'google',
-  Github = 'github',
 }
 
 export const githubRepo = ['ones-project-web', 'ones-ai-web-common', 'wiki-web'];
 
 export const SearchEngine = [
+  {
+    engine: Engine.Github,
+    icon: github,
+  },
   {
     engine: Engine.Google,
     icon: google,
@@ -24,9 +28,5 @@ export const SearchEngine = [
   {
     engine: Engine.Baidu,
     icon: baidu,
-  },
-  {
-    engine: Engine.Github,
-    icon: github,
   },
 ];
